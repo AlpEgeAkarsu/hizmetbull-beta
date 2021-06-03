@@ -1,0 +1,691 @@
+Acentacı
+Acil durum yönetmeni
+Acil tıp teknisyeni
+Adli tabip
+Agronomist
+Ağ yöneticisi
+Aşçı
+Aşçıbaşı
+Ahşap tekne yapımcısı
+Aile hekimi
+Aktar
+Akortçu
+Aktör
+Aktüer
+Aktris
+Akustikçi
+Albay
+Ambalajcı
+Ambarcı
+Ambulans şoförü
+Amiral
+Anahtarcı
+Analist
+Anestezi uzmanı
+Anestezi teknikeri
+Animatör
+Antika satıcısı
+Antropolog
+Apartman yöneticisi
+Araba satıcısı
+Araba yıkayıcısı
+Arabacı
+"Arabulucu",
+"Araştırmacı"
+"Arıcı"
+"Arkeolog"
+Armatör
+Arpist
+Arşivci
+Artist
+"Asansörcü"
+Asistan
+Asker
+"Astrofizikçi"
+"Astrolog"
+Astronom
+Astronot
+Astsubay
+Atlet
+Av bekçisi
+Avcı
+Avizeci
+"Avukat"
+Ayakçı 
+Ayakkabı boyacısı
+"Ayakkabı tamircisi"
+"Ayakkabıcı"
+Ayı oynatıcısı
+Araba tamircisi
+Bacacı
+Badanacı
+"Baharatçı"
+Bahçe bitkileri uzmanı
+Bahçıvan
+Bakan
+Bakıcı
+Bakırcı
+"Bakkal"
+Bakteriyolog
+"Balıkçı"
+"Balerin"
+Balon pilotu
+"Bankacı"
+"Banker"
+"Barmen"
+Barmeyd
+"Basketbolcu"
+Başbakan
+Başçavuş
+Başdümenci
+Başhemşire
+Başkan
+Başkomiser
+Başpiskopos
+Başrahip
+Belediye başkanı
+Belediye meclisi üyesi
+"Benzinci"
+"Berber"
+"Besteci"
+Biletçi
+"Bilgisayar mühendisi"
+"Bilgisayar programcısı"
+"Bilgisayar tamircisi"
+"Bilim insanı"
+"Bilirkişi"
+Binicilik
+Biracı
+"Bisikletçi"
+"Biyografi yazarı"
+Biyolog
+Biyomedikal Mühendisi
+Bobinajcı
+Bombacı
+Bomba imhacı
+Borsacı
+Borucu
+Botanikçi
+"Boyacı"
+Bozacı
+Böcekbilimci
+Börekçi
+"Bulaşıkçı"
+Buldozer operatörü
+"Bütçe uzmanı"
+Büyükelçi
+Besicilik
+"Bebek bakıcısı",
+"Bilgi İşlemci",
+"Camcı",
+"Cerrah"
+Celep
+Cellat
+Cost Control
+Cillopçu
+Cumhurbaşkanı
+"Çamaşırcı",
+"Çantacı",
+Çarkçı
+Çatıcı
+"Çaycı",
+"Çevirmen",
+"Çevrebilimci",
+"Çevre mühendisi",
+"Çeyizci",
+"Çıkıkçı",
+"Çiçekçi",
+"Çiftçi",
+"Çiftlik işletici",
+"Çikolatacı",
+"Çilingir",
+"Çinici",
+"Çitçi",
+"Çoban",
+"Çocuk doktoru",
+Çorapçı
+Çöp işçisi
+"Çöpçü"
+Çırak
+Çevik Kuvvet
+"Dadı"
+Daktilograf
+"Dalgıç"
+
+"Danışman",
+"Dansöz",
+"Davulcu",
+
+"Dedektif",
+"Değirmen işçisi",
+"Değirmenci",
+"Demirci",
+"Demiryolu işçisi"
+
+"Denetleyici",
+"Denizci",
+"Depocu",
+"Derici",
+"Dil ve Konuşma Terapisti",
+"Diş hekimi",
+"Diyetisyen",
+
+"Doğalgazcı",
+
+"Doğramacı",
+"Doğum uzmanı",
+
+
+"Dokumacı",
+"Doktor",
+"Dondurmacı",
+"Dökümcü",
+"Döşemeci",
+"Dövizci",
+"Dublajcı",
+"Duvarcı",
+
+"Dansçı",
+"Ebe",
+"Eczacı",
+"Eczacı kalfası",
+"Editör"
+
+
+"Ekonomist",
+"Elektrik mühendisi",
+"Elektronik mühendisi",
+"Elektrik-Elektronik mühendisi",
+"Elektronik ve Haberleşme mühendisi",
+"Elektrikçi",
+"Eleştirmen",
+
+"Emlakçı",
+
+
+"Endüstri mühendisi",
+"Endüstri sistemleri mühendisi",
+"Enstrüman imalatçısı",
+"Ergonomist",
+"Eskici",
+"Estetisyen",
+
+
+
+
+"Fabrika işçisi",
+
+"Falcı",
+"Fermantasyon işçisi",
+"Fıçıcı",
+"Fırıncı",
+"Figüran",
+"Film yapımcısı",
+"Film yönetmeni",
+"Filozof",
+"Finansör",
+"Fizikçi",
+"Fizyonomist",
+"Fizyoterapist"
+
+"Forklift operatörü"
+"Fotoğrafçı"
+"Futbolcu"
+"Gardiyan"
+"Galerici"
+"Garson"
+
+
+"Gazeteci"
+"Gelir uzmanı"
+
+"Gemici"
+
+"Genetik mühendisi"
+
+
+
+"Gıda mühendisi"
+"Gitarist"
+"Gondolcu"
+"Gökbilimci"
+"Göz doktoru"
+"Gözetmen"
+"Gözlükçü"
+"Grafik Tasarımcısı"
+
+"Greyder operatörü"
+
+
+
+
+"Gündelikçi"
+"Güzellik uzmanı"
+
+"Hakem"
+"Halıcı"
+
+"Hamal"
+"Hamamcı"
+
+
+"Haritacı"
+"Harita mühendisi"
+"Hastabakıcı"
+"Hattat"
+
+
+
+"Hayvan bakıcısı"
+
+"Hemşire"
+
+"Heykeltıraş"
+"Hırdavatçı"
+
+"Hidrolikçi"
+"Hizmetçi"
+"Hokkabaz"
+"Host"
+"Hostes"
+"Hukukçu"
+"Hurdacı"
+"Irgat"
+
+
+"İç mimar"
+"İğneci"
+"İhracatçı"
+"İktisatçı"
+"İlahiyatçı"
+"İllüzyonist"
+"İmam"
+"İnsan kaynakları uzmanı"
+"İnşaat mühendisi"
+"İnşaatçı"
+
+"İstatistikçi"
+
+
+
+"İşletmeci"
+"İşletme mühendisi"
+"İşportacı"
+"İş ve Uğraşı Terapisti"
+"İtfaiyeci"
+"Jeofizik mühendisi"
+"Jeoloji mühendisi"
+"Jeolog"
+"Jeomorfolog"
+"Jinekolog"
+"Jimnastikçi"
+"Jokey"
+
+
+
+
+"Kâğıtçı"
+"Kahveci"
+"Kâhya"
+"Kalaycı"
+"Kalıpçı"
+"Kaloriferci"
+
+"Kameraman"
+"Kamyoncu"
+"Kapı satıcısı"
+"Kapıcı"
+
+"Kaportacı"
+"Kaptan"
+
+"Kardiyolog"
+"Karikatürist"
+
+
+"Kasap"
+"Kasiyer"
+
+"Kâtip"
+"Kayıkçı"
+"Kaynakçı"
+"Kazıcı"
+"Kebapçı"
+"Kemancı"
+
+
+"Kırtasiyeci"
+"Kimyager"
+"Kimya mühendisi"
+"Kitapçı"
+"Klarnetçi"
+"Koleksiyoncu"
+"Komedyen"
+
+
+
+
+
+
+
+"Koruma görevlisi"
+
+"Kömürcü"
+"Köpek eğiticisi"
+"Köşe yazarı"
+"Kuaför"
+"Kuşçu"
+
+"Kumaşçı"
+
+"Kuru temizlemeci"
+"Kuruyemişçi"
+"Kurye"
+"Kuşbilimci"
+"Kuyumcu"
+"Kürkçü"
+"Kütüphaneci"
+
+
+
+"Lokantacı"
+
+"Madenci"
+
+"Maketçi"
+"Makinist"
+"Makine mühendisi"
+
+"Makyajcı"
+
+"Manav"
+"Manifaturacı"
+"Manikürcü"
+"Manken"
+"Marangoz"
+"Masör"
+"Masöz"
+
+"Matbaacı"
+"Matematikçi"
+"Matkapçı"
+"Medya Planlama Uzmanı"
+"Memur"
+"Menajer"
+"Mermerci"
+"Metalurji mühendisi"
+"Meteoroloji uzmanı"
+"Metin yazarı"
+
+"Mevsimlik işçi"
+"Meydancı"
+"Meyhaneci"
+"Mezarcı"
+
+"Mikrobiyolog"
+
+"Mimar"
+
+"Mobilyacı"
+"Modacı"
+"Model"
+
+
+"Montajcı"
+
+"Motor tamircisi"
+
+
+"Muhabir"
+
+"Muhasebeci"
+"Muhtar"
+
+
+"Mübaşir"
+"Müezzin"
+"Müfettiş"
+
+
+
+
+"Müteahhit"
+"Mütercim"
+
+"Müzik yönetmeni"
+"Müzisyen"
+
+
+"Nakışçı"
+"Nakliyeci"
+
+"Nalbur"
+
+
+
+"Oduncu"
+
+
+
+"Operatör"
+"Opera sanatçısı"
+
+
+"Orman mühendisi"
+
+"Otelci"
+"Oto elektrikçisi"
+"Oto lastik tamircisi"
+"Oto tamircisi"
+"Oto yedek parçacı"
+"Overlokçu"
+
+"Oyuncu"
+
+"Oyun yazarı"
+"Oyuncakçı"
+"Öğretmen"
+"Öğretim elemanı"
+
+
+
+"Özel şoför"
+
+"Palyaço"
+"Pandomimci"
+"Pansiyoncu"
+"Pansumancı"
+
+"Park bekçisi"
+
+"Pencereci"
+"Perukçu"
+"Peyzaj mimarı"
+"Peyzaj teknikeri"
+
+
+"Pilot"
+
+
+
+"Piyanist"
+
+"Pompacı"
+"Postacı"
+
+
+
+
+"Psikiyatr"
+"Psikolog
+"Psikolojik danışmanlık ve rehberlik
+"Paramedik"
+
+"Radyolog"
+
+
+
+"Reklamcı"
+
+
+"Ressam"
+
+"Rot balansçı"
+"Radyoloji teknisyeni/teknikeri"
+"Saat tamircisi"
+"Saatçi"
+"Sağlık teknisyeni"
+"Sahil koruma"
+"Saksofoncu"
+
+"Sanat yönetmeni"
+"Sanayici"
+
+
+
+"Satış elemanı"
+
+
+"Sekreter"
+"Senarist"
+
+"Serbest muhasebeci mali müşavir"
+"Ses teknisyeni"
+"Seyis"
+
+
+"Sigortacı"
+
+"Silahçı"
+
+
+"Simyacı"
+"Sistem mühendisi"
+"Sistem yöneticisi"
+
+"Soğuk demirci"
+"Sokak çalgıcısı"
+
+
+
+"Sosyal hizmet uzmanı"
+"Sosyolog"
+"Spiker"
+
+
+"Striptizci"
+"Su tesisatçısı"
+
+"Sucu"
+
+
+"Sunucu"
+
+"Sünnetçi"
+
+
+"Sütçü"
+
+"Şair"
+
+"Şapkacı"
+"Şarap üreticisi"
+"Şarkıcı"
+"Şarkı sözü yazarı"
+"Şarküter"
+"Şekerci"
+"Şemsiyeci"
+
+"Şoför"
+"Şarapçı"
+"Şehir Plancısı"
+
+
+"Taksici"
+"Tarım işçisi"
+"Tarihçi"
+"Tasarımcı"
+
+
+"Tatlıcı"
+
+
+
+
+"Tekniker"
+"Teknisyen"
+"Teknoloji uzmani"
+"Telefon operatörü"
+
+"Televizyon tamircisi"
+"Tellal"
+"Temizlikçi"
+"Temsilci"
+"Terapist"
+"Tercüman"
+"Terzi"
+"Tesgahtar"
+"Tesisatçı"
+
+"Test mühendisi"
+"Test pilotu"
+
+"Tiyatro yönetmeni"
+
+
+"Tornacı"
+"Turizmci"
+
+"Tuhafiyeci"
+"Turşucu"
+
+
+"Uçuş teknisyeni"
+"Ulaşım sorumlusu"
+"Ustabaşı"
+"Uydu antenci"
+"Uzay mühendisi"
+"Uzay bilimcisi"
+
+
+
+"Ürolog"
+"Ütücü"
+
+
+"Vaiz"
+
+
+
+"Veritabanı yöneticisi"
+
+"Veteriner hekim"
+"Veteriner sağlık teknikeri"
+"Veteriner sağlık teknisyeni"
+"Veznedar"
+"Video editörü"
+"Vinç operatörü"
+"Vitrinci"
+"Viyolonselci"
+
+"Vale"
+
+
+"Yatırım uzmanı"
+"Yayıncı"
+"Yazar"
+
+"Yazılım mühendisi"
+"Yelkenci"
+
+
+
+
+
+
+"Yüzücü"
+"Yönetmen"
+
+
+"Zoolog"
+"Ziraat mühendisi"

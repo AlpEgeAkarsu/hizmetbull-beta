@@ -1,0 +1,6 @@
+static const String FIREBASE_URL =
+      "https://getx-practises-default-rtdb.firebaseio.com/users.json";
+  static const String FIREBASE_AUTH_URL =
+      "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCOEJ4D4on1NrgORIEfymOMy04Ij6J_DnE";
+  var uri = Uri.parse(FIREBASE_AUTH_URL);
+  var uri2 = Uri.parse(FIREBASE_URL);

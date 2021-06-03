@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "981390923886",
+    "project_id": "hizmet-bull",
+    "storage_bucket": "hizmet-bull.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981390923886:android:f1858ccafea7630574ae7f",
+        "android_client_info": {
+          "package_name": "com.example.hizmet_bull_beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981390923886-5k4in2426eb01qalmc5oasddr4212qlj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCTTWEEuAXE1ULFq-wZcFqejDIo75ZH4yw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981390923886-5k4in2426eb01qalmc5oasddr4212qlj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
