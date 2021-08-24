@@ -11,20 +11,20 @@ AppUser userFromJson(String str) => AppUser.fromJson(json.decode(str));
 String userToJson(AppUser data) => json.encode(data.toJson());
 
 class AppUser {
-  AppUser({
-    this.city,
-    this.description,
-    this.email,
-    this.job,
-    this.licensedegree,
-    this.location,
-    this.name,
-    this.phoneNum,
-    this.surname,
-    this.jobcity,
-    this.uid,
-    this.userType,
-  });
+  AppUser(
+      {this.city,
+      this.description,
+      this.email,
+      this.job,
+      this.licensedegree,
+      this.location,
+      this.name,
+      this.phoneNum,
+      this.surname,
+      this.jobcity,
+      this.uid,
+      this.userType,
+      this.profilePhotoPath});
 
   String city;
   String description;
@@ -37,6 +37,7 @@ class AppUser {
   String surname;
   String uid;
   int userType;
+  String profilePhotoPath;
   String jobcity;
   // List<UserComment> comments = []; // kaldırabilirsni
 
@@ -54,6 +55,8 @@ class AppUser {
       surname: json["surname"] == null ? null : json["surname"],
       uid: json["uid"] == null ? null : json["uid"],
       userType: json["userType"] == null ? null : json["userType"],
+      profilePhotoPath:
+          json["profilePhotoPath"] == null ? null : json["profilePhotoPath"],
       jobcity: json["jobcity"] == null ? null : json["jobcity"]);
 
   Map<String, dynamic> toJson() => {
@@ -71,6 +74,7 @@ class AppUser {
         "uid": uid == null ? null : uid,
         "userType": userType == null ? null : userType,
         "jobcity": jobcity == null ? null : jobcity,
+        "profilePhotoPath": profilePhotoPath == null ? null : profilePhotoPath
       };
 }
 

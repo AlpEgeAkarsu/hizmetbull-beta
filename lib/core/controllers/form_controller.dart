@@ -24,4 +24,6 @@ class FormController extends GetxController {
   TextEditingController surnameController = new TextEditingController();
   TextEditingController jobController = new TextEditingController();
   TextEditingController cityController = new TextEditingController();
+  TextEditingController messageFieldController = new TextEditingController();
+  //controller.getMessageList(currentUserUID + "_" + receiverId);
 }

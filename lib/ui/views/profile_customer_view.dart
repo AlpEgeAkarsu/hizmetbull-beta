@@ -3,18 +3,21 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/chat_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
 import 'package:hizmet_bull_beta/models/evaluation.dart';
 
 class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
-  final box = GetStorage();
   final TextEditingController descriptionController =
       new TextEditingController();
   CommentController commentController = Get.put(CommentController());
+  ChatController chatController = Get.put(ChatController());
   int arg = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
+    final box = GetStorage();
+    final String currentUserUID = box.read('userUID');
     commentController.currentPageUID.value = controller.userlistoo[arg].uid;
 
     commentController.getOneComment();
@@ -26,9 +29,11 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
               padding: const EdgeInsets.only(right: 4.0),
               child: IconButton(
                 onPressed: () {
-                  Get.toNamed("/profileSettingsView");
+                  chatController.createChatRoom(
+                      currentUserUID, controller.userlistoo[arg].uid);
+                  Get.toNamed("/messengerView", arguments: arg);
                 },
-                icon: Icon(Icons.settings),
+                icon: Icon(Icons.messenger),
               ),
             )
           ],

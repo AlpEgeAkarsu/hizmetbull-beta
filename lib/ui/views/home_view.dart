@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/chat_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/chatroom_controller.dart';
 import 'package:hizmet_bull_beta/models/users.dart';
 import 'package:hizmet_bull_beta/models/suggestion.dart';
 
@@ -59,7 +62,18 @@ class HomeView extends GetWidget<FirebaseAuthController> {
                           Get.toNamed("/registerView");
                         },
                       )
-                    : Container()
+                    : Container(),
+                box.read('isLoggedIn') == null
+                    ? Container()
+                    : IconButton(
+                        onPressed: () {
+                          Get.put(ChatRoomController())
+                              .getUserChatRooms(box.read('userUID'));
+                          Get.toNamed(
+                            "/messengerRoomView",
+                          );
+                        },
+                        icon: Icon(Icons.message))
               ],
             ),
           )
@@ -85,8 +99,11 @@ class HomeView extends GetWidget<FirebaseAuthController> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(24.0),
-                          child: textFieldAndButton(jobChoiceController,
-                              cityChoiceController, controller),
+                          child: textFieldAndButton(
+                            jobChoiceController,
+                            cityChoiceController,
+                            controller,
+                          ),
                         )
                       ],
                     ))
@@ -131,6 +148,8 @@ Widget searchButton(TextEditingController controller,
     onPressed: () async {
       var job = controller.text;
       authController.setJobSelected(true);
+      SystemChannels.textInput.invokeMethod('TextInput.hide');
+      authController.userlistoo.clear();
       var city = controller2?.text;
       try {
         Map<dynamic, dynamic> data =
@@ -151,7 +170,10 @@ Widget searchButton(TextEditingController controller,
       } finally {
         if (authController.userlistoo.isNotEmpty) {
           Get.toNamed("/resultsView");
-        }
+        } else if (authController.isJobSelected.value && city != "") {
+          Get.snackbar("Deneme", "Hizmet Bulunamadı");
+        } else
+          print("");
       }
     },
     child: Text(

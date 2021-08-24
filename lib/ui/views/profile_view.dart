@@ -304,9 +304,16 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            CircleAvatar(
-              maxRadius: 60,
-              foregroundImage: AssetImage("assets/images/exampleAvatar.png"),
+            GestureDetector(
+              onTap: () {
+                Get.put(ImageController()).selectFile();
+              },
+              child: CircleAvatar(
+                maxRadius: 60,
+                foregroundImage: NetworkImage(
+                  "https://firebasestorage.googleapis.com/v0/b/hizmet-bull.appspot.com/o/files%2FlzsmauL8tkevfxD0aNyphkDz5VI3%2Fflrtt.png?alt=media&token=5aa1179a-647d-48cb-af73-2fb3e23f83de",
+                ),
+              ),
             ),
             SizedBox(
               height: 30,
