@@ -39,12 +39,14 @@ class LoginView extends GetWidget<FirebaseAuthController> {
         ),
         CustomTextFormField(
           hintText: "jane@example.com",
+          isObscure: false,
           formcontroller: formcontroller.usernameController,
         ),
         SizedBox(
           height: 10,
         ),
         CustomTextFormField(
+          isObscure: true,
           hintText: "*********",
           formcontroller: formcontroller.passwordController,
         ),
@@ -69,9 +71,14 @@ class LoginView extends GetWidget<FirebaseAuthController> {
             SizedBox(
               width: 5,
             ),
-            Text(
-              "Şimdi Kaydolun",
-              style: TextStyle(color: Colors.blue),
+            GestureDetector(
+              onTap: () {
+                Get.toNamed("/registerView");
+              },
+              child: Text(
+                "Şimdi Kaydolun",
+                style: TextStyle(color: Colors.blue),
+              ),
             )
           ],
         )

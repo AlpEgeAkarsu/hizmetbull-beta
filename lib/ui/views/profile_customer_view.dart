@@ -4,23 +4,49 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/chat_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/chatroomstore_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
 import 'package:hizmet_bull_beta/models/evaluation.dart';
+import 'package:hizmet_bull_beta/ui/views/chatstore_view.dart';
+
+getChatRoomId(String a, String b) {
+  if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+    return "$b\_$a";
+  } else {
+    return "$a\_$b";
+  }
+}
+
+createChatRoom(
+    String userId, String userId2, String username1, String username2) {
+  List<String> users = [username1, username2];
+
+  String chatRoomId = userId + "_" + userId2;
+
+  Map<String, dynamic> chatRoom = {
+    "users": users,
+    "chatRoomId": chatRoomId,
+  };
+
+  Get.put(ChatRoomStoreController()).addChatRoom(chatRoom, chatRoomId);
+}
 
 class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
   final TextEditingController descriptionController =
       new TextEditingController();
   CommentController commentController = Get.put(CommentController());
   ChatController chatController = Get.put(ChatController());
+  ImageController imageController = Get.put(ImageController());
   int arg = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
     final box = GetStorage();
     final String currentUserUID = box.read('userUID');
-    commentController.currentPageUID.value = controller.userlistoo[arg].uid;
+    // commentController.currentPageUID.value = controller.userlistoo[arg].uid;
 
-    commentController.getOneComment();
+    // commentController.getUserComments();
 
     return Scaffold(
         appBar: AppBar(
@@ -29,9 +55,12 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
               padding: const EdgeInsets.only(right: 4.0),
               child: IconButton(
                 onPressed: () {
-                  chatController.createChatRoom(
-                      currentUserUID, controller.userlistoo[arg].uid);
-                  Get.toNamed("/messengerView", arguments: arg);
+                  // chatController.createChatRoom(
+                  //     currentUserUID, controller.userlistoo[arg].uid);
+                  createChatRoom(currentUserUID, controller.userlistoo[arg].uid,
+                      box.read("name"), controller.userlistoo[arg].name);
+                  // Get.toNamed("/messengerView", arguments: arg);
+                  Get.toNamed("/chatStoreView", arguments: arg);
                 },
                 icon: Icon(Icons.messenger),
               ),
@@ -95,46 +124,43 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                GridView.count(
-                  shrinkWrap: true,
-                  primary: false,
-                  padding: const EdgeInsets.all(20),
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      child: Text("He'd have you all unravel at the"),
-                      color: Colors.teal[100],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      child: const Text('Heed not the rabble'),
-                      color: Colors.teal[200],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      child: const Text('Sound of screams but the'),
-                      color: Colors.teal[300],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      child: const Text('Who scream'),
-                      color: Colors.teal[400],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      child: const Text('Revolution is coming...'),
-                      color: Colors.teal[500],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      child: const Text('Revolution, they...'),
-                      color: Colors.teal[600],
-                    ),
-                  ],
-                ),
+                Obx(() => GridView.builder(
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 15.0,
+                        mainAxisSpacing: 5.0,
+                      ),
+                      itemCount: imageController.photoURLS.length == 0
+                          ? 1
+                          : imageController.photoURLS.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (_) {
+                              return FullScreenImage(
+                                imageUrl: imageController.photoURLS[index],
+                                tag: "tag+$index",
+                              );
+                            }));
+                          },
+                          child: Container(
+                            color: Colors.blue,
+                            child: imageController.photoURLS.length == 0
+                                ? Container()
+                                : Hero(
+                                    tag: "tag+$index",
+                                    child: Image.network(
+                                        imageController.photoURLS[index],
+                                        // width: Get.width,
+                                        fit: BoxFit.cover),
+                                  ),
+                          ),
+                        );
+                      },
+                    )),
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -253,7 +279,11 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
       children: [
         CircleAvatar(
           maxRadius: 60,
-          foregroundImage: AssetImage("assets/images/exampleAvatar.png"),
+          foregroundImage: NetworkImage(authController
+                      .userlistoo[arg].profilePhotoPath ==
+                  null
+              ? "https://www.nicepng.com/png/detail/136-1366211_group-of-10-guys-login-user-icon-png.png"
+              : authController.userlistoo[arg].profilePhotoPath),
         ),
         SizedBox(
           height: 30,
@@ -303,15 +333,20 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                           ElevatedButton(
                               onPressed: () {
                                 UserComment comment = UserComment(
-                                    commentDate: "29.05.2021",
+                                    commentDate: DateTime.now().toString(),
                                     commentator: box.read("name"),
                                     commentPoint: 1,
-                                    commentContent:
-                                        "Her şeasfasfasfysafasfafasfasf için asfasfasf",
+                                    commentContent: descriptionController.text,
                                     commentOwner:
                                         controller.userlistoo[arg].uid);
+                                try {
+                                  commentController.sendCommentToDB(
+                                      comment, controller.userlistoo[arg].uid);
 
-                                commentController.sendCommentToDB(comment);
+                                  Get.back();
+                                  Get.snackbar(
+                                      "Başarılı", "Yorumunuz Gönderilmiştir");
+                                } catch (e) {}
                               },
                               child: Text("Değerlendirme Gir"))
                         ],
@@ -322,10 +357,9 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                     "Değerlendirme Girebilmeniz İçin Hizmet Alan Olmalısınız !!");
           },
           child: Obx(() => RatingBarIndicator(
-                rating: commentController.userTotalPoint != 0.obs
-                    ? commentController.userTotalPoint /
-                        commentController.comments.length
-                    : 0,
+                rating: commentController.userTotalPoint.value != null
+                    ? commentController.userTotalPoint.value
+                    : 0.0,
                 // rating: 2,
                 itemBuilder: (context, index) => Icon(
                   Icons.star,
@@ -344,6 +378,35 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
               fontWeight: FontWeight.bold, fontSize: 24, fontFamily: "Roboto"),
         ),
       ],
+    );
+  }
+}
+
+class FullScreenImage extends StatelessWidget {
+  final String imageUrl;
+  final String tag;
+
+  const FullScreenImage({Key key, this.imageUrl, this.tag}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black87,
+      body: GestureDetector(
+        child: Center(
+          child: Hero(
+            tag: tag,
+            child: Image.network(
+              imageUrl,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.pop(context);
+        },
+      ),
     );
   }
 }

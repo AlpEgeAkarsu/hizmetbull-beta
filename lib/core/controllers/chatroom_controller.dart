@@ -30,12 +30,15 @@ class ChatRoomController extends GetxController {
           },
         );
       } else
-        print("sıkıntı");
+        print("Bir sorun oluştu.");
     });
-    chatRoomIds.addAll(test3);
-    print("chat room Ids  = " + chatRoomIds.toString());
-    await getChatRoomDetails();
-    await getUserByUID();
+
+    if (test3 != null) {
+      chatRoomIds.addAll(test3);
+      print("chat room Ids  = " + chatRoomIds.toString());
+      await getChatRoomDetails();
+      await getUserByUID();
+    }
   }
 
   Future<void> getChatRoomDetails() async {

@@ -1,20 +1,57 @@
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
-import 'package:hizmet_bull_beta/core/controllers/chat_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/chatroomstore_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/form_controller.dart';
 
-class MessengerView extends GetWidget<ChatController> {
-  const MessengerView({Key key}) : super(key: key);
+class ChatStoreView extends StatefulWidget {
+  @override
+  _ChatStoreViewState createState() => _ChatStoreViewState();
+}
+
+class _ChatStoreViewState extends State<ChatStoreView> {
+  ChatRoomStoreController storeController = Get.put(ChatRoomStoreController());
+
+  final box = GetStorage();
+
+  Stream<QuerySnapshot> chats;
+  FirebaseAuthController authController = Get.put(FirebaseAuthController());
+
+  var arg = Get.arguments;
+  @override
+  void initState() {
+    setState(() {
+      chats = storeController.getChats(
+          box.read("userUID") + "_" + authController.userlistoo[arg].uid);
+    });
+    super.initState();
+  }
+
+  Widget chatMessages() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: chats,
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return MessageTile(
+                    message: snapshot.data.docs[index].data()["message"],
+                    sendByMe: box.read("name") ==
+                        snapshot.data.docs[index].data()["sendBy"],
+                  );
+                })
+            : Container();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    FirebaseAuthController authController = Get.put(FirebaseAuthController());
-    final box = GetStorage();
-    final String currentUserUID = box.read('userUID');
-    int arg = Get.arguments;
+    var currentUserUID = box.read("userUID");
 
     return Scaffold(
       appBar: AppBar(
@@ -74,52 +111,17 @@ class MessengerView extends GetWidget<ChatController> {
           ),
         ),
       ),
-      body: body(authController, currentUserUID, arg),
-    );
-  }
-
-  Widget body(
-      FirebaseAuthController authController, String currentUserUID, int arg) {
-    return Container(
-      height: Get.height,
-      width: Get.width,
-      decoration: BoxDecoration(color: Colors.white),
-      child: Stack(
-        children: [
-          getMessageList(authController, currentUserUID, arg),
-          getBottomBar(authController, currentUserUID, arg),
-        ],
+      body: Container(
+        width: Get.width,
+        height: Get.height,
+        child: Stack(
+          children: [
+            chatMessages(),
+            getBottomBar(authController, currentUserUID, arg)
+          ],
+        ),
       ),
     );
-  }
-
-  Widget getMessageList(
-      FirebaseAuthController authController, String currentUserUID, int arg) {
-    return Padding(
-        padding: EdgeInsets.only(bottom: 50),
-        child: Obx(() => ListView.builder(
-              reverse: true,
-              shrinkWrap: true,
-              itemCount: controller.messagelist.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding:
-                      EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),
-                  child: Align(
-                    alignment: controller.messagelist[index].sentBy ==
-                            authController.userlistoo[arg].uid
-                        ? Alignment.topLeft
-                        : Alignment.topRight,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.green),
-                      child: Text(controller.messagelist[index].content),
-                    ),
-                  ),
-                );
-              },
-            )));
   }
 
   Widget getBottomBar(
@@ -146,7 +148,7 @@ class MessengerView extends GetWidget<ChatController> {
       child: TextFormField(
         controller: Get.put(FormController()).messageFieldController,
         decoration: InputDecoration(
-          hintText: "ASFASF",
+          hintText: "",
           contentPadding: EdgeInsets.only(left: 8),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14),
@@ -172,14 +174,64 @@ class MessengerView extends GetWidget<ChatController> {
       child: GestureDetector(
         onTap: () {
           var receiverId = authController.userlistoo[arg].uid;
-          controller.addMessagesToChatRoom(
-              Get.put(FormController()).messageFieldController.text,
-              currentUserUID,
-              receiverId);
-          SystemChannels.textInput.invokeMethod('TextInput.hide');
-          Get.put(FormController()).messageFieldController.clear();
+          addMessage(box.read("userUID"), receiverId,
+              Get.put(FormController()).messageFieldController.text);
+          Get.put(FormController()).messageFieldController.text = "";
         },
         child: Icon(Icons.send),
+      ),
+    );
+  }
+
+  addMessage(String userUID, String user2UID, String messageContent) {
+    Map<String, dynamic> chatMessageMap = {
+      "sendBy": box.read("name"),
+      "message": messageContent,
+      'time': DateTime.now().millisecondsSinceEpoch,
+    };
+
+    storeController.addMessage(userUID + "_" + user2UID, chatMessageMap);
+  }
+}
+
+class MessageTile extends StatelessWidget {
+  final String message;
+  final bool sendByMe;
+
+  MessageTile({@required this.message, @required this.sendByMe});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+          top: 8, bottom: 8, left: sendByMe ? 0 : 24, right: sendByMe ? 24 : 0),
+      alignment: sendByMe ? Alignment.centerRight : Alignment.centerLeft,
+      child: Container(
+        margin:
+            sendByMe ? EdgeInsets.only(left: 30) : EdgeInsets.only(right: 30),
+        padding: EdgeInsets.only(top: 17, bottom: 17, left: 20, right: 20),
+        decoration: BoxDecoration(
+            borderRadius: sendByMe
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(23),
+                    topRight: Radius.circular(23),
+                    bottomLeft: Radius.circular(23))
+                : BorderRadius.only(
+                    topLeft: Radius.circular(23),
+                    topRight: Radius.circular(23),
+                    bottomRight: Radius.circular(23)),
+            gradient: LinearGradient(
+              colors: sendByMe
+                  ? [const Color(0xff007EF4), const Color(0xff2A75BC)]
+                  : [const Color(0x1AFFFFFF), const Color(0x1AFFFFFF)],
+            )),
+        child: Text(message,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: 'OverpassRegular',
+                fontWeight: FontWeight.w300)),
       ),
     );
   }

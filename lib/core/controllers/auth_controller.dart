@@ -28,23 +28,6 @@ class FirebaseAuthController extends GetxController {
     update();
   }
 
-  void createUserTypeOne(
-      String name, String surname, String email, String password) async {
-    AppUser appUser =
-        new AppUser(email: email, name: name, surname: surname, userType: 1);
-    appUser.toJson();
-    try {
-      await _auth
-          .createUserWithEmailAndPassword(
-              email: email.trim(), password: password)
-          .then((value) => uid = value.user.uid)
-          .then((value) => appUser.uid = uid)
-          .then((value) => createUserOnDB(appUser.toJson()));
-    } catch (e) {
-      Get.snackbar("Bağlantı sağlanamadı", "Sıkıntı");
-    }
-  }
-
   // creates user informations for realtime database with users' unique id
 
   void createUserOnDB(Map<dynamic, dynamic> userData) async {
@@ -63,6 +46,33 @@ class FirebaseAuthController extends GetxController {
       return await ref.once().then((DataSnapshot snapshot) => snapshot.value);
     } catch (e) {
       Get.snackbar("Hata: ", "$e");
+    }
+  }
+
+  void createUserTypeOne(
+      String name, String surname, String email, String password) async {
+    AppUser appUser =
+        new AppUser(email: email, name: name, surname: surname, userType: 1);
+    appUser.toJson();
+    try {
+      await _auth
+          .createUserWithEmailAndPassword(
+              email: email.trim(), password: password)
+          .then((value) => uid = value.user.uid)
+          .then((value) => appUser.uid = uid)
+          .then((value) => createUserOnDB(appUser.toJson()))
+          .then((value) async {
+        appuser = await getUserInfo(uid);
+        currentUserData.write('name', appuser?.name);
+        currentUserData.write('surname', appuser?.surname);
+        currentUserData.write('email', appuser?.email);
+        currentUserData.write('isLoggedIn', true);
+        currentUserData.write('userType', appuser?.userType);
+        currentUserData.write('userUID', appuser?.uid);
+        Get.offAllNamed("/");
+      });
+    } catch (e) {
+      Get.snackbar("Bağlantı sağlanamadı", "$e");
     }
   }
 
@@ -132,7 +142,8 @@ class FirebaseAuthController extends GetxController {
       });
     } catch (e) {
       print(e.toString());
-      Get.snackbar("Bağlantı sağlanamadı", "Nedense sıkıntı var");
+      Get.snackbar(
+          "Bağlantı sağlanamadı", "Giriş Bilgileri Hatalı veya İnternet Yok");
     }
   }
 

@@ -24,7 +24,8 @@ class AppUser {
       this.jobcity,
       this.uid,
       this.userType,
-      this.profilePhotoPath});
+      this.profilePhotoPath,
+      this.userPoint});
 
   String city;
   String description;
@@ -39,6 +40,7 @@ class AppUser {
   int userType;
   String profilePhotoPath;
   String jobcity;
+  String userPoint;
   // List<UserComment> comments = []; // kaldırabilirsni
 
   factory AppUser.fromJson(Map<dynamic, dynamic> json) => AppUser(
@@ -55,6 +57,7 @@ class AppUser {
       surname: json["surname"] == null ? null : json["surname"],
       uid: json["uid"] == null ? null : json["uid"],
       userType: json["userType"] == null ? null : json["userType"],
+      userPoint: json["userPoint"] == null ? null : json["userPoint"],
       profilePhotoPath:
           json["profilePhotoPath"] == null ? null : json["profilePhotoPath"],
       jobcity: json["jobcity"] == null ? null : json["jobcity"]);
@@ -73,6 +76,7 @@ class AppUser {
         "surname": surname == null ? null : surname,
         "uid": uid == null ? null : uid,
         "userType": userType == null ? null : userType,
+        "userPoint": userPoint == null ? null : userPoint,
         "jobcity": jobcity == null ? null : jobcity,
         "profilePhotoPath": profilePhotoPath == null ? null : profilePhotoPath
       };

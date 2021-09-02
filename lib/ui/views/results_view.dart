@@ -3,9 +3,11 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
 
 class ResultsView extends GetWidget<FirebaseAuthController> {
   CommentController commentController = Get.put(CommentController());
+  ImageController imageController = Get.put(ImageController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,15 +21,28 @@ class ResultsView extends GetWidget<FirebaseAuthController> {
         itemCount:
             controller.userlistoo.isEmpty ? 1 : controller.userlistoo.length,
         itemBuilder: (context, index) {
-          commentController.currentPageUID.value =
-              controller.userlistoo[index].uid;
+          // commentController.currentPageUID.value =
+          //     controller.userlistoo[index].uid;
 
-          commentController.getOneComment();
+          // commentController.getUserComments();
+
           return Padding(
             padding: const EdgeInsets.all(16.0),
             child: GestureDetector(
-              onTap: () {
+              onTap: () async {
                 print(index.toString());
+                await Get.put(ImageController())
+                    .getUserProfilePhotoURL(controller.userlistoo[index].uid);
+                Get.put(ImageController()).photoURLS.clear();
+                await Get.put(ImageController())
+                    .getImageList(userUID: controller.userlistoo[index].uid);
+                commentController.currentPageUID.value =
+                    controller.userlistoo[index].uid;
+                commentController.comments.clear();
+                commentController.userTotalPoint.value = 0.0;
+                commentController.getUserComments();
+                await commentController
+                    .calculateUserPoint(controller.userlistoo[index].uid);
                 Get.toNamed("/profileCustomerView", arguments: index);
               },
               child: Card(
@@ -39,8 +54,10 @@ class ResultsView extends GetWidget<FirebaseAuthController> {
                     children: [
                       CircleAvatar(
                         maxRadius: 25,
-                        foregroundImage: AssetImage(
-                          "assets/images/exampleAvatar.png",
+                        foregroundImage: NetworkImage(
+                          controller.userlistoo[index].profilePhotoPath == null
+                              ? "https://www.nicepng.com/png/detail/136-1366211_group-of-10-guys-login-user-icon-png.png"
+                              : controller.userlistoo[index].profilePhotoPath,
                         ),
                       ),
                       Expanded(
@@ -53,21 +70,25 @@ class ResultsView extends GetWidget<FirebaseAuthController> {
                                 Text(controller.userlistoo[index].name +
                                     " " +
                                     controller.userlistoo[index].surname),
-                                Obx(() => RatingBarIndicator(
-                                      rating: commentController
-                                                  .userTotalPoint !=
-                                              0.obs
-                                          ? commentController.userTotalPoint /
-                                              commentController.comments.length
-                                          : 0,
-                                      itemBuilder: (context, index) => Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      itemCount: 5,
-                                      itemSize: 15.0,
-                                      direction: Axis.horizontal,
-                                    )),
+                                RatingBarIndicator(
+                                  rating:
+                                      controller.userlistoo[index].userPoint ==
+                                                  null ||
+                                              double.parse(controller
+                                                      .userlistoo[index]
+                                                      .userPoint) ==
+                                                  0
+                                          ? 0
+                                          : double.parse(controller
+                                              .userlistoo[index].userPoint),
+                                  itemBuilder: (context, index) => Icon(
+                                    Icons.star,
+                                    color: Colors.amber,
+                                  ),
+                                  itemCount: 5,
+                                  itemSize: 15.0,
+                                  direction: Axis.horizontal,
+                                ),
                               ],
                             ),
                             Column(

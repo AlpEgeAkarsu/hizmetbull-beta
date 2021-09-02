@@ -20,4 +20,6 @@ void main() {
       }
     });
   });
+
+  test("User Point Calculation", () {});
 }

@@ -10,25 +10,28 @@ import 'package:path/path.dart';
 
 class ImageController extends GetxController {
   File file;
+  RxList<dynamic> photoURLS = [].obs;
   final firebaseDbRef = FirebaseDatabase.instance.reference();
   final box = GetStorage();
-  Future selectFile() async {
+  final userProfilePhotoURL = 'getx'.obs;
+  Future selectFile({bool isProfilePhoto = false}) async {
     final result = await FilePicker.platform.pickFiles(allowMultiple: true);
     if (result == null) return;
     final path = result.files.single.path;
 
     file = File(path);
-    uploadFile();
+    uploadFile(isProfilePhoto: isProfilePhoto);
   }
 
-  Future uploadFile() async {
+  Future uploadFile({bool isProfilePhoto = false}) async {
     if (file == null) return;
     final fileName = basename(file.path);
     final destination = 'files/' + box.read("userUID") + "/" + fileName;
-    uploadToDBFile(destination, file);
+    uploadToDBFile(destination, file, isProfilePhoto: isProfilePhoto);
   }
 
-  Future<void> uploadToDBFile(String destination, File file) async {
+  Future<void> uploadToDBFile(String destination, File file,
+      {bool isProfilePhoto = false}) async {
     try {
       var uploadTask = firebase_storage.FirebaseStorage.instance
           .ref(destination)
@@ -36,6 +39,7 @@ class ImageController extends GetxController {
       var imageUrl = await (await uploadTask).ref.getDownloadURL();
       var url = imageUrl.toString();
       print(url);
+      if (isProfilePhoto) uploadUserProfilePhotoURL(box.read("userUID"), url);
     } on FirebaseException catch (e) {
       print("$e");
       return null;
@@ -48,24 +52,60 @@ class ImageController extends GetxController {
         .child(uid)
         .child("profilePhotoPath")
         .set(photoPath);
+    box.write("profilePhotoPath", photoPath);
+    Get.defaultDialog(
+        title: "Fotoğraf Güncellendi",
+        middleText: "Profil Fotoğrafınız Güncellendi");
   }
 
-  Future<void> getImageList() async {
+  Future<void> getUserProfilePhotoURL(String uid) async {
+    await firebaseDbRef
+        .child("users")
+        .child(uid)
+        .child("profilePhotoPath")
+        .once()
+        .then((value) {
+      box.write("profilePhotoPath", value.value);
+      //   userProfilePhotoURL.value = value.value;
+      print(value.value);
+    });
+  }
+
+  Future<void> getImageList({String userUID}) async {
     firebase_storage.FirebaseStorage storage =
         firebase_storage.FirebaseStorage.instance;
 
     firebase_storage.ListResult result = await storage
         .ref()
         .child('files/')
-        .child(box.read("userUID"))
+        .child(userUID == null ? box.read("userUID") : userUID)
         .listAll();
 
-    result.items.forEach((firebase_storage.Reference ref) {
+    result.items.forEach((firebase_storage.Reference ref) async {
       print('Found file: $ref');
+      photoURLS.add(await getDownloadURL(ref.name,
+          userid: userUID == null ? box.read('userUID') : userUID));
+      print(photoURLS.toString());
     });
 
     result.prefixes.forEach((firebase_storage.Reference ref) {
       print('Found directory: $ref');
     });
+  }
+
+  Future<String> getDownloadURL(String filename, {String userid}) async {
+    String downloadURL;
+    firebase_storage.FirebaseStorage storage =
+        firebase_storage.FirebaseStorage.instance;
+    var ref = storage.ref();
+    await ref
+        .child('files/')
+        .child(userid == null ? box.read("userUID") : userid)
+        .child(filename)
+        .getDownloadURL()
+        .then((value) {
+      downloadURL = value;
+    });
+    return downloadURL.toString();
   }
 }

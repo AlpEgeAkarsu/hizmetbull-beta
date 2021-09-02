@@ -13,9 +13,9 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
   ImageController imageController = Get.put(ImageController());
   @override
   Widget build(BuildContext context) {
-    commentController.currentPageUID.value = box.read("userUID");
+    // commentController.currentPageUID.value = box.read("userUID");
 
-    commentController.getOneComment();
+    // commentController.getUserComments();
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -107,46 +107,44 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                             icon: Icon(Icons.add_a_photo)),
                       ],
                     ),
-                    GridView.count(
-                      shrinkWrap: true,
-                      primary: false,
-                      padding: const EdgeInsets.all(20),
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      crossAxisCount: 2,
-                      children: <Widget>[
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: Text("He'd have you all unravel at the"),
-                          color: Colors.teal[100],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Heed not the rabble'),
-                          color: Colors.teal[200],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Sound of screams but the'),
-                          color: Colors.teal[300],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Who scream'),
-                          color: Colors.teal[400],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Revolution is coming...'),
-                          color: Colors.teal[500],
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          child: const Text('Revolution, they...'),
-                          color: Colors.teal[600],
-                        ),
-                      ],
-                    ),
+                    Obx(() => GridView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 15.0,
+                            mainAxisSpacing: 5.0,
+                          ),
+                          itemCount: imageController.photoURLS.length == 0
+                              ? 1
+                              : imageController.photoURLS.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (_) {
+                                  return FullScreenImage(
+                                    imageUrl: imageController.photoURLS[index],
+                                    tag: "tag+$index",
+                                  );
+                                }));
+                              },
+                              child: Container(
+                                color: Colors.blue,
+                                child: imageController.photoURLS.length == 0
+                                    ? Container()
+                                    : Hero(
+                                        tag: "tag+$index",
+                                        child: Image.network(
+                                            imageController.photoURLS[index],
+                                            // width: Get.width,
+                                            fit: BoxFit.cover),
+                                      ),
+                              ),
+                            );
+                          },
+                        )),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
@@ -268,9 +266,17 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
   Column avatarNameStar(GetStorage box) {
     return Column(
       children: [
-        CircleAvatar(
-          maxRadius: 60,
-          foregroundImage: AssetImage("assets/images/exampleAvatar.png"),
+        GestureDetector(
+          onTap: () {
+            imageController.selectFile(isProfilePhoto: true);
+          },
+          child: CircleAvatar(
+              maxRadius: 60,
+              foregroundImage: NetworkImage(
+                box.read("profilePhotoPath") == null
+                    ? "https://www.nicepng.com/png/detail/136-1366211_group-of-10-guys-login-user-icon-png.png"
+                    : box.read("profilePhotoPath"),
+              )),
         ),
         SizedBox(
           height: 30,
@@ -306,20 +312,29 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
           children: [
             GestureDetector(
               onTap: () {
-                Get.put(ImageController()).selectFile();
+                Get.put(ImageController()).selectFile(isProfilePhoto: true);
               },
               child: CircleAvatar(
                 maxRadius: 60,
                 foregroundImage: NetworkImage(
-                  "https://firebasestorage.googleapis.com/v0/b/hizmet-bull.appspot.com/o/files%2FlzsmauL8tkevfxD0aNyphkDz5VI3%2Fflrtt.png?alt=media&token=5aa1179a-647d-48cb-af73-2fb3e23f83de",
-                ),
+                    // Get.put(ImageController())
+                    //             .getUserProfilePhotoURL(box.read("userUID")) ==
+                    //         null
+                    //     ? "https://firebasestorage.googleapis.com/v0/b/hizmet-bull.appspot.com/o/files%2FlzsmauL8tkevfxD0aNyphkDz5VI3%2Fborweinandroid.jpeg?alt=media&token=488ecc97-2aff-440a-81ce-d748aa2c67d3"
+                    //     : Get.put(ImageController())
+                    //         .getUserProfilePhotoURL(box.read("userUID")),
+                    box.read("profilePhotoPath") == null
+                        ? "https://www.nicepng.com/png/detail/136-1366211_group-of-10-guys-login-user-icon-png.png"
+                        : box.read("profilePhotoPath")),
               ),
             ),
             SizedBox(
               height: 30,
             ),
             Text(
-              box.read('name') + " " + box?.read('surname') ?? 'Null',
+              box.read('name') != null && box.read('surname') != null
+                  ? box.read('name') + " " + box.read('surname')
+                  : 'null',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -330,20 +345,21 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: profileInformationLabels(secondLabel: box?.read('city')),
+              child: profileInformationLabels(
+                  secondLabel: box?.read('city') ?? '-'),
             ),
             basicSpacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: profileInformationLabels(
-                  firstLabel: "Meslek:", secondLabel: box?.read('job')),
+                  firstLabel: "Meslek:", secondLabel: box?.read('job') ?? '-'),
             ),
             basicSpacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: profileInformationLabels(
                   firstLabel: "Mail Adres:",
-                  secondLabel: box?.read('email') ?? "jane@gmail.com"),
+                  secondLabel: box?.read('email') ?? "-"),
             ),
             basicSpacer(),
             Padding(
@@ -353,6 +369,35 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class FullScreenImage extends StatelessWidget {
+  final String imageUrl;
+  final String tag;
+
+  const FullScreenImage({Key key, this.imageUrl, this.tag}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black87,
+      body: GestureDetector(
+        child: Center(
+          child: Hero(
+            tag: tag,
+            child: Image.network(
+              imageUrl,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

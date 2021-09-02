@@ -83,6 +83,7 @@ class ChatController extends GetxController {
         .child("chats")
         .child(roomId)
         .child("messages")
+        .orderByChild("messageDate")
         .once()
         .then((snapshot) {
       if (snapshot.value != null) {
@@ -128,4 +129,7 @@ class ChatController extends GetxController {
         .push()
         .set(roomId);
   }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 }

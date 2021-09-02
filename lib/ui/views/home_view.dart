@@ -7,6 +7,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/chat_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/chatroom_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
 import 'package:hizmet_bull_beta/models/users.dart';
 import 'package:hizmet_bull_beta/models/suggestion.dart';
 
@@ -47,15 +49,36 @@ class HomeView extends GetWidget<FirebaseAuthController> {
                   icon: Icon(Icons.person),
                   onPressed: () {
                     try {
-                      box.read('isLoggedIn') == null
-                          ? Get.toNamed("/loginView")
-                          : Get.toNamed("/profileView");
+                      if (box.read('isLoggedIn') != null &&
+                          box.read('name') != null &&
+                          box.read('surname') != null) {
+                        if (box.read("userType") == 2) {
+                          Get.put(CommentController()).comments.clear();
+                          Get.put(CommentController()).currentPageUID.value =
+                              box.read("userUID");
+                          Get.put(CommentController()).getUserComments();
+                          Get.put(ImageController())
+                              .getUserProfilePhotoURL(box.read("userUID"));
+                          Get.put(ImageController()).photoURLS.clear();
+                          Get.put(ImageController()).getImageList();
+
+                          Get.toNamed("/profileView");
+                        }
+
+                        Get.put(ImageController())
+                            .getUserProfilePhotoURL(box.read("userUID"));
+                        Get.put(ImageController()).photoURLS.clear();
+                        Get.put(ImageController()).getImageList();
+
+                        Get.toNamed("/profileView");
+                      } else
+                        Get.toNamed("/loginView");
                     } catch (e) {
                       Get.snackbar("asd", "$e");
                     }
                   },
                 ),
-                box.read('isLoggedIn') == null
+                box.read('isLoggedIn') == null && box.read('name') == null
                     ? IconButton(
                         icon: Icon(Icons.person_add),
                         onPressed: () {
@@ -67,11 +90,12 @@ class HomeView extends GetWidget<FirebaseAuthController> {
                     ? Container()
                     : IconButton(
                         onPressed: () {
-                          Get.put(ChatRoomController())
-                              .getUserChatRooms(box.read('userUID'));
-                          Get.toNamed(
-                            "/messengerRoomView",
-                          );
+                          // await Get.put(ChatRoomController())
+                          //     .getUserChatRooms(box.read('userUID'));
+                          // Get.toNamed(
+                          //   "/messengerRoomView",
+                          // );
+                          Get.toNamed("/chatRoomStoreView");
                         },
                         icon: Icon(Icons.message))
               ],
@@ -165,6 +189,7 @@ Widget searchButton(TextEditingController controller,
           authController.userlistoo.clear();
         }
       } catch (e) {
+        print(e);
         Get.snackbar("Hata:", ("Lütfen Geçerli Bir Şehir İsmi Giriniz"));
         authController.setJobSelected(false);
       } finally {

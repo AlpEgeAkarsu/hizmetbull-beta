@@ -97,12 +97,12 @@ Widget firstTabBarView(FirebaseAuthController controller,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 1,
-              child: Text(
-                "Kayıt Ol",
-                style: TextStyle(fontSize: 36, fontFamily: "Comfortaa"),
-              ),
+            Text(
+              "Kayıt Ol",
+              style: TextStyle(fontSize: 36, fontFamily: "Comfortaa"),
+            ),
+            SizedBox(
+              height: 20,
             ),
             Expanded(
               child: Row(
@@ -111,6 +111,7 @@ Widget firstTabBarView(FirebaseAuthController controller,
                     child: CustomTextFormField(
                       formcontroller: formcontroller.nameController,
                       hintText: "AD",
+                      isObscure: false,
                     ),
                   ),
                   SizedBox(
@@ -120,18 +121,24 @@ Widget firstTabBarView(FirebaseAuthController controller,
                       child: CustomTextFormField(
                     formcontroller: formcontroller.surnameController,
                     hintText: "SOYAD",
+                    isObscure: false,
                   ))
                 ],
               ),
+            ),
+            SizedBox(
+              height: 10,
             ),
             Expanded(
                 child: CustomTextFormField(
               formcontroller: formcontroller.usernameController,
               hintText: "jane@example.com",
+              isObscure: false,
             )),
             Expanded(
                 child: CustomTextFormField(
               hintText: "*********",
+              isObscure: true,
               formcontroller: formcontroller.passwordController,
             )),
             Center(
@@ -145,7 +152,9 @@ Widget firstTabBarView(FirebaseAuthController controller,
                         formcontroller.passwordController.text,
                       ),
                     ))),
-            Spacer()
+            Spacer(
+              flex: 3,
+            )
           ],
         ),
       ),
@@ -173,6 +182,7 @@ Widget secondTabBarView(FirebaseAuthController controller,
                   Expanded(
                     child: CustomTextFormField(
                       hintText: "AD",
+                      isObscure: false,
                       formcontroller: formcontroller.nameController,
                     ),
                   ),
@@ -182,6 +192,7 @@ Widget secondTabBarView(FirebaseAuthController controller,
                   Expanded(
                       child: CustomTextFormField(
                     hintText: "SOYAD",
+                    isObscure: false,
                     formcontroller: formcontroller.surnameController,
                   ))
                 ],
@@ -190,11 +201,13 @@ Widget secondTabBarView(FirebaseAuthController controller,
             Expanded(
                 child: CustomTextFormField(
               hintText: "jane@example.com",
+              isObscure: false,
               formcontroller: formcontroller.usernameController,
             )),
             Expanded(
                 child: CustomTextFormField(
               hintText: "*********",
+              isObscure: true,
               formcontroller: formcontroller.passwordController,
             )),
             Expanded(child: searchTextField(formcontroller, "HİZMET SEÇ")),
