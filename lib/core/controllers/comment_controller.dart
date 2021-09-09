@@ -7,6 +7,7 @@ class CommentController extends GetxController {
   RxList<UserComment> comments = <UserComment>[].obs;
   RxString currentPageUID = "".obs;
   RxDouble userTotalPoint = 0.0.obs;
+  RxDouble customerCommentPoint = 0.0.obs;
   void sendCommentToDB(UserComment comment, String commentOwnerId) {
     firebaseDbRef
         .child("comments")
@@ -20,7 +21,7 @@ class CommentController extends GetxController {
       List<UserComment> commentList = await getComments(currentPageUID.value);
       if (commentList.isNotEmpty) {
       } else {
-        print("Comment list ilk index boş !!");
+        print("Yorumlar listesi boş.");
       }
     } catch (e) {
       print("$e");
@@ -37,7 +38,7 @@ class CommentController extends GetxController {
           comments.add(comment);
         });
       } else {
-        print("bok");
+        print("Veritabanında okunacak yorum yok.");
       }
     } catch (e) {
       print("$e");

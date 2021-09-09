@@ -101,8 +101,21 @@ class _ChatStoreUserViewState extends State<ChatStoreUserView> {
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.verified,
+                IconButton(
+                  onPressed: () {
+                    Get.defaultDialog(
+                        title: "Hatırlatma",
+                        textCancel: "İptal",
+                        textConfirm: "Onaylıyorum",
+                        onConfirm: () async {
+                          await storeController.updateChatRoomApprove(
+                              arg["roomId"], box.read("userType"));
+                          Get.back();
+                        },
+                        middleText:
+                            "Kullanıcı ile alışveriş yaptığınızı onaylamak ister misiniz ? ");
+                  },
+                  icon: Icon(Icons.verified),
                   color: Colors.black54,
                 ),
               ],

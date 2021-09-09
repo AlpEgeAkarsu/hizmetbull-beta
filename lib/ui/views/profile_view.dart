@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/common_database_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/map_controller.dart';
 import 'package:hizmet_bull_beta/ui/widgets/profile_widgets.dart';
 
 class ProfileView extends GetWidget<FirebaseAuthController> {
@@ -58,23 +60,32 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: profileInformationLabels(
                           firstLabel: "Mail Adres:",
-                          secondLabel: box.read('email') ?? "jane@gmail.com"),
+                          secondLabel: box.read('email') ?? "-"),
                     ),
                     basicSpacer(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: profileInformationLabels(
-                          firstLabel: "Telefon Numarası:",
-                          secondLabel: "05333536362"),
+                          firstLabel: "Telefon Numarası:", secondLabel: "-"),
                     ),
                     basicSpacer(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: profileInformationLabels(
-                          firstLabel: "Lisans Derecesi:",
-                          secondLabel: "Yüksek Lisans"),
+                          firstLabel: "Lisans Derecesi:", secondLabel: "-"),
                     ),
                     basicSpacer(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Açıklamalar",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     SizedBox(
                       height: 10,
                     ),
@@ -84,8 +95,14 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                       decoration: BoxDecoration(border: Border.all()),
                       child: Wrap(
                         children: [
-                          Text(
-                              "Şurda Okudum şöyle yaptım,böyle yaptım...Şurda Okudum şöyle yaptım,böyle yaptım...Şurda Okudum şöyle yaptım,böyle yaptım...")
+                          Text(Get.put(CommonDatabaseController())
+                                      .userDescriptionData
+                                      .value !=
+                                  null
+                              ? Get.put(CommonDatabaseController())
+                                  .userDescriptionData
+                                  .value
+                              : "")
                         ],
                       ),
                     ),
@@ -181,18 +198,19 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                                                 ? commentController
                                                     .comments[index]
                                                     .commentContent
-                                                : "asd"),
+                                                : "Boş Yorum"),
                                           )
                                         ],
                                       ),
                                     ),
                                     RatingBar.builder(
-                                      initialRating: commentController
-                                                  .userTotalPoint !=
-                                              0.obs
-                                          ? commentController.userTotalPoint /
-                                              commentController.comments.length
-                                          : 2,
+                                      initialRating:
+                                          commentController.userTotalPoint !=
+                                                  0.0.obs
+                                              ? commentController
+                                                  .comments[index].commentPoint
+                                                  .toDouble()
+                                              : 2,
                                       ignoreGestures: true,
                                       direction: Axis.horizontal,
                                       allowHalfRating: true,
@@ -217,12 +235,29 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                     SizedBox(
                       height: 50,
                     ),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "Adres",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                     Container(
                       width: Get.width * 0.8,
                       height: 150,
                       decoration: BoxDecoration(border: Border.all()),
                       child: Wrap(
-                        children: [Text("Adres")],
+                        children: [
+                          Obx(() => Text(Get.put(MapController())
+                                      .currentUserAddress
+                                      .value !=
+                                  null
+                              ? Get.put(MapController())
+                                  .currentUserAddress
+                                  .value
+                              : "-"))
+                        ],
                       ),
                     ),
                     SizedBox(
@@ -282,7 +317,9 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
           height: 30,
         ),
         RatingBarIndicator(
-          rating: 2.75,
+          rating: commentController.userTotalPoint.value != null
+              ? commentController.userTotalPoint.value
+              : 0.0,
           itemBuilder: (context, index) => Icon(
             Icons.star,
             color: Colors.amber,
@@ -316,16 +353,10 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
               },
               child: CircleAvatar(
                 maxRadius: 60,
-                foregroundImage: NetworkImage(
-                    // Get.put(ImageController())
-                    //             .getUserProfilePhotoURL(box.read("userUID")) ==
-                    //         null
-                    //     ? "https://firebasestorage.googleapis.com/v0/b/hizmet-bull.appspot.com/o/files%2FlzsmauL8tkevfxD0aNyphkDz5VI3%2Fborweinandroid.jpeg?alt=media&token=488ecc97-2aff-440a-81ce-d748aa2c67d3"
-                    //     : Get.put(ImageController())
-                    //         .getUserProfilePhotoURL(box.read("userUID")),
-                    box.read("profilePhotoPath") == null
-                        ? "https://www.nicepng.com/png/detail/136-1366211_group-of-10-guys-login-user-icon-png.png"
-                        : box.read("profilePhotoPath")),
+                foregroundImage: NetworkImage(box.read("profilePhotoPath") ==
+                        null
+                    ? "https://www.nicepng.com/png/detail/136-1366211_group-of-10-guys-login-user-icon-png.png"
+                    : box.read("profilePhotoPath")),
               ),
             ),
             SizedBox(
@@ -343,18 +374,19 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
             SizedBox(
               height: 30,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: profileInformationLabels(
-                  secondLabel: box?.read('city') ?? '-'),
-            ),
-            basicSpacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: profileInformationLabels(
-                  firstLabel: "Meslek:", secondLabel: box?.read('job') ?? '-'),
-            ),
-            basicSpacer(),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            //   child: profileInformationLabels(
+            //     firstLabel: "",
+            //       secondLabel: box?.read('city') ?? '-'),
+            // ),
+            // basicSpacer(),
+            // Padding(
+            //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            //   child: profileInformationLabels(
+            //       firstLabel: "Meslek:", secondLabel: box?.read('job') ?? '-'),
+            // ),
+            // basicSpacer(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: profileInformationLabels(
@@ -366,6 +398,32 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: profileInformationLabels(
                   firstLabel: "Telefon Numarası:", secondLabel: "-"),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text(
+                "Adres",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: Get.width * 0.8,
+              height: 150,
+              decoration: BoxDecoration(border: Border.all()),
+              child: Wrap(
+                children: [
+                  Obx(() => Text(
+                      Get.put(MapController()).currentUserAddress.value != null
+                          ? Get.put(MapController()).currentUserAddress.value
+                          : "-"))
+                ],
+              ),
             ),
           ],
         ),

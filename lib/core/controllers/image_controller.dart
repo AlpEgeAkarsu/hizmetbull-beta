@@ -38,7 +38,7 @@ class ImageController extends GetxController {
           .putFile(file);
       var imageUrl = await (await uploadTask).ref.getDownloadURL();
       var url = imageUrl.toString();
-      print(url);
+      // print(url);
       if (isProfilePhoto) uploadUserProfilePhotoURL(box.read("userUID"), url);
     } on FirebaseException catch (e) {
       print("$e");
@@ -67,7 +67,7 @@ class ImageController extends GetxController {
         .then((value) {
       box.write("profilePhotoPath", value.value);
       //   userProfilePhotoURL.value = value.value;
-      print(value.value);
+      //  print(value.value);
     });
   }
 
@@ -82,15 +82,15 @@ class ImageController extends GetxController {
         .listAll();
 
     result.items.forEach((firebase_storage.Reference ref) async {
-      print('Found file: $ref');
+      // print('Found file: $ref');
       photoURLS.add(await getDownloadURL(ref.name,
           userid: userUID == null ? box.read('userUID') : userUID));
-      print(photoURLS.toString());
+      // print(photoURLS.toString());
     });
 
-    result.prefixes.forEach((firebase_storage.Reference ref) {
-      print('Found directory: $ref');
-    });
+    // result.prefixes.forEach((firebase_storage.Reference ref) {
+    //   print('Found directory: $ref');
+    // });
   }
 
   Future<String> getDownloadURL(String filename, {String userid}) async {

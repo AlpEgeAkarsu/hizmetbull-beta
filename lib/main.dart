@@ -11,10 +11,12 @@ import 'package:hizmet_bull_beta/ui/views/login_view.dart';
 import 'package:hizmet_bull_beta/ui/views/chatroomstore_view.dart';
 
 import 'package:hizmet_bull_beta/ui/views/profile_customer_view.dart';
+import 'package:hizmet_bull_beta/ui/views/profile_informations_settings_view.dart';
 import 'package:hizmet_bull_beta/ui/views/profile_settings_view.dart';
 import 'package:hizmet_bull_beta/ui/views/profile_view.dart';
 import 'package:hizmet_bull_beta/ui/views/register_view.dart';
 import 'package:hizmet_bull_beta/ui/views/results_view.dart';
+import 'package:hizmet_bull_beta/ui/views/tempmap_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,6 +41,9 @@ void main() async {
       GetPage(name: "/chatStoreView", page: () => ChatStoreView()),
       GetPage(name: "/chatStoreUserView", page: () => ChatStoreUserView()),
       GetPage(name: "/chatRoomStoreView", page: () => ChatRoomStoreView()),
+      GetPage(
+          name: "/profileInformationsSettings",
+          page: () => ProfileInformationsSettingsView()),
     ],
     home: HomeView(),
   ));

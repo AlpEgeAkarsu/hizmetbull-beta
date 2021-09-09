@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/map_controller.dart';
 
 class ResultsView extends GetWidget<FirebaseAuthController> {
   CommentController commentController = Get.put(CommentController());
@@ -43,6 +44,8 @@ class ResultsView extends GetWidget<FirebaseAuthController> {
                 commentController.getUserComments();
                 await commentController
                     .calculateUserPoint(controller.userlistoo[index].uid);
+                Get.put(MapController()).getUserCurrentAdressFromDb(
+                    controller.userlistoo[index].uid);
                 Get.toNamed("/profileCustomerView", arguments: index);
               },
               child: Card(

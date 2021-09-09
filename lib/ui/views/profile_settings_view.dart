@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/form_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/map_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/profile_settings_controller.dart';
+import 'package:hizmet_bull_beta/models/suggestion.dart';
 import 'package:hizmet_bull_beta/ui/widgets/register_custom_button.dart';
 import 'package:hizmet_bull_beta/ui/widgets/register_custom_formfield.dart';
 
 class ProfileSettingsView extends GetWidget<FirebaseAuthController> {
   var formcont = Get.put(FormController());
+  final box = GetStorage();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +32,8 @@ class ProfileSettingsView extends GetWidget<FirebaseAuthController> {
                     style: TextStyle(fontSize: 36, fontFamily: "Comfortaa"),
                   ),
                 ),
+
+                // PASSWORD SETTINGS
                 ListTile(
                   tileColor: Colors.white,
                   onTap: () {
@@ -37,17 +45,25 @@ class ProfileSettingsView extends GetWidget<FirebaseAuthController> {
                           child: Column(
                             children: [
                               CustomTextFormField(
+                                isObscure: true,
                                 hintText: "Eski Şifre",
                               ),
                               SizedBox(
                                 height: 10,
                               ),
                               CustomTextFormField(
+                                isObscure: true,
                                 hintText: "Yeni Şifre",
+                                formcontroller:
+                                    formcont.settingsPasswordController,
                               ),
-                              RegisterCustomButton(
-                                buttonText: "DEĞİŞTİR",
-                              )
+                              ElevatedButton(
+                                  onPressed: () {
+                                    Get.put(ProfileSettingsController())
+                                        .changePassword(formcont
+                                            .settingsPasswordController.text);
+                                  },
+                                  child: Text("DEĞİŞTİR"))
                             ],
                           ),
                         );
@@ -57,70 +73,51 @@ class ProfileSettingsView extends GetWidget<FirebaseAuthController> {
                   title: Text(
                     "Şifre Değiştirme",
                   ),
-                  trailing: Icon(Icons.arrow_right),
+                  trailing: IconButton(
+                    onPressed: () {
+                      Get.put(MapController())
+                          .userLocation(box.read("userUID"));
+                    },
+                    icon: Icon(Icons.arrow_right),
+                  ),
                 ),
+
+                // USER PROFILE INFORMATIONS
                 ListTile(
                   tileColor: Colors.white,
                   onTap: () {
-                    Get.bottomSheet(BottomSheet(
-                      onClosing: () {},
-                      builder: (context) {
-                        return Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Column(
-                                children: [
-                                  CustomTextFormField(
-                                    hintText: "AD",
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  CustomTextFormField(
-                                    hintText: "SOYAD",
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  CustomTextFormField(
-                                    hintText: "ŞEHİR",
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  CustomTextFormField(
-                                    hintText: "MESLEK",
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  CustomTextFormField(
-                                    hintText: "LİSANS DERECESİ",
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  CustomTextFormField(
-                                    hintText: "TELEFON NUMARASI",
-                                  ),
-                                  RegisterCustomButton(
-                                    buttonText: "DEĞİŞTİR",
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ));
+                    Get.toNamed("/profileInformationsSettings");
                   },
                   title: Text(
                     "Kullanıcı Bilgilerini Değiştirme",
                   ),
                   trailing: IconButton(
                     onPressed: () {},
+                    icon: Icon(Icons.arrow_right),
+                  ),
+                ),
+
+                // LOCATION INFORMATIONS
+                ListTile(
+                  tileColor: Colors.white,
+                  onTap: () async {
+                    await Get.put(MapController())
+                        .userLocation(box.read("userUID"));
+                    Get.defaultDialog(
+                        title: "Konumuz Güncellendi",
+                        middleText:
+                            "Güncel Konumunuza Göre Konum Bilgileriniz Güncellendi");
+                  },
+                  title: Text("Konum Bilgilerini Otomatik Olarak Ayarlama"),
+                  trailing: IconButton(
+                    onPressed: () async {
+                      await Get.put(MapController())
+                          .userLocation(box.read("userUID"));
+                      Get.defaultDialog(
+                          title: "Konumuz Güncellendi",
+                          middleText:
+                              "Güncel Konumunuza Göre Konum Bilgileriniz Güncellendi");
+                    },
                     icon: Icon(Icons.arrow_right),
                   ),
                 ),

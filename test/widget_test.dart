@@ -8,6 +8,9 @@
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:hizmet_bull_beta/core/controllers/chatroomstore_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
 
 void main() {
   test("Read File", () {
@@ -21,5 +24,8 @@ void main() {
     });
   });
 
-  test("User Point Calculation", () {});
+  test("Check User Approve Method", () {
+    Get.put(ChatRoomStoreController()).checkIfUsersApprovedEachOther(
+        "lzsmauL8tkevfxD0aNyphkDz5VI3_5CHuQeXC4XYu74eM3LRMGVZRdZX2");
+  });
 }

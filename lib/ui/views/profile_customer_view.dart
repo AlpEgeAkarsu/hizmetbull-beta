@@ -7,6 +7,7 @@ import 'package:hizmet_bull_beta/core/controllers/chat_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/chatroomstore_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/map_controller.dart';
 import 'package:hizmet_bull_beta/models/evaluation.dart';
 import 'package:hizmet_bull_beta/ui/views/chatstore_view.dart';
 
@@ -27,6 +28,8 @@ createChatRoom(
   Map<String, dynamic> chatRoom = {
     "users": users,
     "chatRoomId": chatRoomId,
+    "user1Approve": false,
+    "user2Approve": false
   };
 
   Get.put(ChatRoomStoreController()).addChatRoom(chatRoom, chatRoomId);
@@ -55,12 +58,18 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
               padding: const EdgeInsets.only(right: 4.0),
               child: IconButton(
                 onPressed: () {
-                  // chatController.createChatRoom(
-                  //     currentUserUID, controller.userlistoo[arg].uid);
-                  createChatRoom(currentUserUID, controller.userlistoo[arg].uid,
-                      box.read("name"), controller.userlistoo[arg].name);
-                  // Get.toNamed("/messengerView", arguments: arg);
-                  Get.toNamed("/chatStoreView", arguments: arg);
+                  if (box.read("userType") == 1) {
+                    createChatRoom(
+                        currentUserUID,
+                        controller.userlistoo[arg].uid,
+                        box.read("name"),
+                        controller.userlistoo[arg].name);
+
+                    Get.toNamed("/chatStoreView", arguments: arg);
+                  } else {
+                    Get.snackbar("Uyarı",
+                        "Mesaj gönderebilmek için hizmet alan olmalısınız !");
+                  }
                 },
                 icon: Icon(Icons.messenger),
               ),
@@ -78,9 +87,9 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                 SizedBox(
                   height: 30,
                 ),
-                profileInformationLabels(
-                    firstLabel: "Doğum Tarihi", secondLabel: "-"),
-                basicSpacer(),
+                // profileInformationLabels(
+                //     firstLabel: "Doğum Tarihi", secondLabel: "-"),
+                // basicSpacer(),
                 profileInformationLabels(
                     secondLabel: controller.userlistoo[arg].city),
                 basicSpacer(),
@@ -109,8 +118,9 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                   decoration: BoxDecoration(border: Border.all()),
                   child: Wrap(
                     children: [
-                      Text(
-                          "Şurda Okudum şöyle yaptım,böyle yaptım...Şurda Okudum şöyle yaptım,böyle yaptım...Şurda Okudum şöyle yaptım,böyle yaptım...")
+                      Text(controller.userlistoo[arg].description != null
+                          ? controller.userlistoo[arg].description
+                          : "")
                     ],
                   ),
                 ),
@@ -201,7 +211,8 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                                 ),
                                 RatingBar.builder(
                                   initialRating:
-                                      commentController.userTotalPoint != 0.obs
+                                      commentController.userTotalPoint !=
+                                              0.0.obs
                                           ? commentController.userTotalPoint /
                                               commentController.comments.length
                                           : 2,
@@ -231,7 +242,14 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                   height: 150,
                   decoration: BoxDecoration(border: Border.all()),
                   child: Wrap(
-                    children: [Text("Adres")],
+                    children: [
+                      Obx(() => Text(Get.put(MapController())
+                                  .currentUserAddress
+                                  .value !=
+                              null
+                          ? Get.put(MapController()).currentUserAddress.value
+                          : "-"))
+                    ],
                   ),
                 ),
               ],
@@ -289,12 +307,18 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
           height: 30,
         ),
         GestureDetector(
-          onTap: () {
-            box.read('userType') == 1
-                ? Get.bottomSheet(BottomSheet(
-                    onClosing: () {},
-                    builder: (context) {
-                      return Column(
+          onTap: () async {
+            if (box.read("userType") == 1) {
+              if (await Get.put(ChatRoomStoreController())
+                      .checkIfUsersApprovedEachOther(box.read("userUID") +
+                          "_" +
+                          authController.userlistoo[arg].uid) ==
+                  true) {
+                Get.bottomSheet(BottomSheet(
+                  onClosing: () {},
+                  builder: (context) {
+                    return SingleChildScrollView(
+                      child: Column(
                         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           SizedBox(
@@ -309,7 +333,6 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                             initialRating: 3,
                             direction: Axis.horizontal,
                             allowHalfRating: true,
-                            ignoreGestures: true,
                             itemCount: 5,
                             itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
                             itemBuilder: (context, _) => Icon(
@@ -318,6 +341,8 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                             ),
                             onRatingUpdate: (rating) {
                               print(rating);
+                              commentController.customerCommentPoint.value =
+                                  rating;
                             },
                           ),
                           Padding(
@@ -335,7 +360,13 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                                 UserComment comment = UserComment(
                                     commentDate: DateTime.now().toString(),
                                     commentator: box.read("name"),
-                                    commentPoint: 1,
+                                    commentPoint: commentController
+                                                .customerCommentPoint.value !=
+                                            null
+                                        ? commentController
+                                            .customerCommentPoint.value
+                                            .toInt()
+                                        : 2,
                                     commentContent: descriptionController.text,
                                     commentOwner:
                                         controller.userlistoo[arg].uid);
@@ -350,11 +381,16 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                               },
                               child: Text("Değerlendirme Gir"))
                         ],
-                      );
-                    },
-                  ))
-                : Get.snackbar("",
-                    "Değerlendirme Girebilmeniz İçin Hizmet Alan Olmalısınız !!");
+                      ),
+                    );
+                  },
+                ));
+              } else
+                Get.snackbar(
+                    "", "Değerlendirme Girebilmeniz İçin Onay Gerekiyor");
+            } else
+              Get.snackbar("",
+                  "Değerlendirme Girebilmeniz İçin Hizmet Alan Olmalısınız !!");
           },
           child: Obx(() => RatingBarIndicator(
                 rating: commentController.userTotalPoint.value != null

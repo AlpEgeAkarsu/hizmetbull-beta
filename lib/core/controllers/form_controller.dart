@@ -2,22 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class FormController extends GetxController {
-  // RxString name = ''.obs;
-  // RxString surname = ''.obs;
-  // RxString email = ''.obs;
-  // RxString password = ''.obs;
-  // RxString city = ''.obs;
-  // RxString job = ''.obs;
-  // RxString errorText = RxString(null);
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  // }
-
-  // void usernameChanged(String val) {
-  //   name.value = val;
-  // }
+  // GENERAL TEXTFIELDS
   TextEditingController usernameController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
@@ -25,5 +10,19 @@ class FormController extends GetxController {
   TextEditingController jobController = new TextEditingController();
   TextEditingController cityController = new TextEditingController();
   TextEditingController messageFieldController = new TextEditingController();
-  //controller.getMessageList(currentUserUID + "_" + receiverId);
+
+  // SETTINGS TEXTFIELDS
+  TextEditingController settingsPasswordController =
+      new TextEditingController();
+  TextEditingController settingsNameController = new TextEditingController();
+  TextEditingController settingsSurnameController = new TextEditingController();
+  TextEditingController settingsPhoneController = new TextEditingController();
+  TextEditingController settingsDescriptionController =
+      new TextEditingController();
+  TextEditingController settingsAddressController = new TextEditingController();
+  TextEditingController settingsJobController = new TextEditingController();
+  TextEditingController settingsCityController = new TextEditingController();
+  TextEditingController settingsLicenseController = new TextEditingController();
+  TextEditingController settingsUniversityController =
+      new TextEditingController();
 }

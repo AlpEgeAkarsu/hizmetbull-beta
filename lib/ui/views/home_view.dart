@@ -7,8 +7,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/chat_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/chatroom_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/chatroomstore_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/common_database_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
+import 'package:hizmet_bull_beta/core/controllers/map_controller.dart';
 import 'package:hizmet_bull_beta/models/users.dart';
 import 'package:hizmet_bull_beta/models/suggestion.dart';
 
@@ -24,6 +27,7 @@ class HomeView extends GetWidget<FirebaseAuthController> {
       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
+            // Simple state refresh button (home icon)
             onPressed: () {
               Get.offAllNamed("/");
               controller.isJobSelected = false.obs;
@@ -34,10 +38,8 @@ class HomeView extends GetWidget<FirebaseAuthController> {
               print(box?.read('isLoggedIn'));
               print(box?.read('userType').toString());
 
-              Get.snackbar(
-                  "",
-                  box.read('isLoggedIn').toString() +
-                      box.read('name').toString());
+              Get.snackbar("Ekran Yenilendi",
+                  "Kullanıcı Adı: " + box.read('name').toString());
             },
             icon: Icon(Icons.home)),
         actions: [
@@ -49,26 +51,36 @@ class HomeView extends GetWidget<FirebaseAuthController> {
                   icon: Icon(Icons.person),
                   onPressed: () {
                     try {
+                      // if user is logged and name and surname is not null
                       if (box.read('isLoggedIn') != null &&
                           box.read('name') != null &&
                           box.read('surname') != null) {
+                        // if usertype is hizmetveren
                         if (box.read("userType") == 2) {
                           Get.put(CommentController()).comments.clear();
                           Get.put(CommentController()).currentPageUID.value =
                               box.read("userUID");
                           Get.put(CommentController()).getUserComments();
+                          Get.put(CommentController())
+                              .calculateUserPoint(box.read("userUID"));
                           Get.put(ImageController())
                               .getUserProfilePhotoURL(box.read("userUID"));
+                          Get.put(CommonDatabaseController())
+                              .getCurrentUserDescription(box.read("userUID"));
                           Get.put(ImageController()).photoURLS.clear();
                           Get.put(ImageController()).getImageList();
 
                           Get.toNamed("/profileView");
                         }
-
+                        // if user is logged and usertype is hizmetalan
                         Get.put(ImageController())
                             .getUserProfilePhotoURL(box.read("userUID"));
                         Get.put(ImageController()).photoURLS.clear();
                         Get.put(ImageController()).getImageList();
+                        Get.put(MapController())
+                            .getUserCurrentAdressFromDb(box.read("userUID"));
+                        // Get.put(MapController())
+                        //     .userLocation(box.read("userUID"));
 
                         Get.toNamed("/profileView");
                       } else
@@ -90,11 +102,6 @@ class HomeView extends GetWidget<FirebaseAuthController> {
                     ? Container()
                     : IconButton(
                         onPressed: () {
-                          // await Get.put(ChatRoomController())
-                          //     .getUserChatRooms(box.read('userUID'));
-                          // Get.toNamed(
-                          //   "/messengerRoomView",
-                          // );
                           Get.toNamed("/chatRoomStoreView");
                         },
                         icon: Icon(Icons.message))

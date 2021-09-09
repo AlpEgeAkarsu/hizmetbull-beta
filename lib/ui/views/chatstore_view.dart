@@ -102,8 +102,26 @@ class _ChatStoreViewState extends State<ChatStoreView> {
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.verified,
+                IconButton(
+                  onPressed: () async {
+                    Get.defaultDialog(
+                        title: "Hatırlatma",
+                        textCancel: "İptal",
+                        textConfirm: "Onaylıyorum",
+                        onConfirm: () async {
+                          await storeController.updateChatRoomApprove(
+                              box.read("userUID") +
+                                  "_" +
+                                  authController.userlistoo[arg].uid,
+                              1);
+                          Get.back();
+                        },
+                        middleText:
+                            "Kullanıcı ile alışveriş yaptığınızı onaylamak ister misiniz ? ");
+                  },
+                  icon: Icon(
+                    Icons.verified,
+                  ),
                   color: Colors.black54,
                 ),
               ],
@@ -223,7 +241,7 @@ class MessageTile extends StatelessWidget {
             gradient: LinearGradient(
               colors: sendByMe
                   ? [const Color(0xff007EF4), const Color(0xff2A75BC)]
-                  : [const Color(0x1AFFFFFF), const Color(0x1AFFFFFF)],
+                  : [const Color(0xff007EF4), const Color(0xff2A75BC)],
             )),
         child: Text(message,
             textAlign: TextAlign.start,

@@ -35,6 +35,46 @@ class ChatRoomStoreController extends GetxController {
     });
   }
 
+  updateChatRoomApprove(String chatRoomId, int userType) async {
+    var tempData;
+    if (userType == 1) {
+      tempData = {"user1Approve": true};
+    } else {
+      tempData = {"user2Approve": true};
+    }
+    await FirebaseFirestore.instance
+        .collection("chatRoom")
+        .doc(chatRoomId)
+        .update(tempData)
+        .catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  Future<bool> checkIfUsersApprovedEachOther(String chatRoomId) async {
+    var data;
+    try {
+      await FirebaseFirestore.instance
+          .collection("chatRoom")
+          .doc(chatRoomId)
+          .get()
+          .then((value) {
+        if (value.data()["user1Approve"] == true &&
+            value.data()["user2Approve"] == true) {
+          print("Yorum Yapmaya Uygun.");
+          data = true;
+        } else {
+          print("Yorum Yapmaya Uygun Değil");
+          data = false;
+        }
+      });
+    } catch (e) {
+      print(e.toString());
+      data = false;
+    }
+    return data;
+  }
+
   getUserChats(String userName) {
     Stream<QuerySnapshot> snapshot = FirebaseFirestore.instance
         .collection("chatRoom")
