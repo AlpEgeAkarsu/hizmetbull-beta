@@ -80,14 +80,38 @@ class ProfileSettingsController extends GetxController {
     }
   }
 
+  changeEmail(String newEmail) async {
+    var tempUser = _auth.currentUser;
+    try {
+      await tempUser.updateEmail(newEmail);
+      firebaseDbRef
+          .child("users")
+          .child(tempUser.uid)
+          .child("email")
+          .set(newEmail);
+      Get.back();
+      Get.defaultDialog(
+          title: "Başarılı",
+          middleText:
+              "Email Adresi Değiştirildi. Tekrar Giriş Yaparken Yeni Email Adresinizi Giriniz");
+    } catch (e) {
+      Get.back();
+      Get.defaultDialog(
+          title: "Başarısız", middleText: "Email Adresi Değiştirilemedi");
+      print(e);
+    }
+  }
+
   changePassword(String newPassword) async {
     var tempUser = _auth.currentUser;
-
     try {
       await tempUser.updatePassword(newPassword);
-      Get.snackbar("Başarılı", "Şifre Değiştirildi");
+      Get.back();
+      Get.defaultDialog(title: "Başarılı", middleText: "Şifre Değiştirildi");
     } catch (e) {
-      Get.snackbar("Başarısız", "Şifre Değiştirilemedi");
+      Get.back();
+      Get.defaultDialog(
+          title: "Başarısız", middleText: "Şifre Değiştirilemedi");
     }
   }
 }

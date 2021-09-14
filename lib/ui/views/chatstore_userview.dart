@@ -108,9 +108,17 @@ class _ChatStoreUserViewState extends State<ChatStoreUserView> {
                         textCancel: "İptal",
                         textConfirm: "Onaylıyorum",
                         onConfirm: () async {
-                          await storeController.updateChatRoomApprove(
-                              arg["roomId"], box.read("userType"));
-                          Get.back();
+                          try {
+                            await storeController.updateChatRoomApprove(
+                                arg["roomId"], box.read("userType"));
+                            Get.back();
+                            Get.defaultDialog(
+                                title: "Başarılı",
+                                middleText:
+                                    "Hizmet Sizin Tarafınızdan Onaylanmıştır.");
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                         middleText:
                             "Kullanıcı ile alışveriş yaptığınızı onaylamak ister misiniz ? ");

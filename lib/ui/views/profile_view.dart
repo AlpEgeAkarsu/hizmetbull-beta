@@ -66,13 +66,22 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: profileInformationLabels(
-                          firstLabel: "Telefon Numarası:", secondLabel: "-"),
+                          firstLabel: "Telefon Numarası:",
+                          secondLabel: box.read("phone") ?? "-"),
                     ),
                     basicSpacer(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: profileInformationLabels(
-                          firstLabel: "Lisans Derecesi:", secondLabel: "-"),
+                          firstLabel: "Lisans Derecesi:",
+                          secondLabel: box?.read("licensedegree") ?? "-"),
+                    ),
+                    basicSpacer(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: profileInformationLabels(
+                          firstLabel: "Üniversite:",
+                          secondLabel: box?.read("university") ?? "-"),
                     ),
                     basicSpacer(),
                     SizedBox(
@@ -134,7 +143,7 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                             mainAxisSpacing: 5.0,
                           ),
                           itemCount: imageController.photoURLS.length == 0
-                              ? 1
+                              ? 0
                               : imageController.photoURLS.length,
                           itemBuilder: (context, index) {
                             return GestureDetector(
@@ -181,7 +190,10 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    CircleAvatar(),
+                                    CircleAvatar(
+                                      backgroundImage: NetworkImage(
+                                          "https://www.nicepng.com/png/detail/136-1366211_group-of-10-guys-login-user-icon-png.png"),
+                                    ),
                                     Text(
                                       commentController
                                           .comments[index].commentator,
@@ -397,7 +409,8 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: profileInformationLabels(
-                  firstLabel: "Telefon Numarası:", secondLabel: "-"),
+                  firstLabel: "Telefon Numarası:",
+                  secondLabel: box?.read('phone') ?? "-"),
             ),
             SizedBox(
               height: 30,

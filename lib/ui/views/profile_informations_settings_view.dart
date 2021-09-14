@@ -44,6 +44,7 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                                           box.read("userUID"),
                                           "name",
                                           formcont.settingsNameController.text);
+                                  formcont.settingsNameController.clear();
                                 },
                                 child: Text("Güncelle"))
                           ],
@@ -72,6 +73,7 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                                           "surname",
                                           formcont
                                               .settingsSurnameController.text);
+                                  formcont.settingsSurnameController.clear();
                                 },
                                 child: Text("Güncelle"))
                           ],
@@ -100,6 +102,8 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                                           "description",
                                           formcont.settingsDescriptionController
                                               .text);
+                                  formcont.settingsDescriptionController
+                                      .clear();
                                 },
                                 child: Text("Güncelle"))
                           ],
@@ -145,6 +149,8 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                               child: CustomTextFormField(
                                 isObscure: false,
                                 hintText: "ÜNİVERSİTE",
+                                formcontroller:
+                                    formcont.settingsUniversityController,
                               ),
                             ),
                             SizedBox(
@@ -155,9 +161,10 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                                   Get.put(ProfileSettingsController())
                                       .changeSingleField(
                                           box.read("userUID"),
-                                          "description",
-                                          formcont.settingsDescriptionController
+                                          "university",
+                                          formcont.settingsUniversityController
                                               .text);
+                                  formcont.settingsUniversityController.clear();
                                 },
                                 child: Text("Güncelle"))
                           ],
@@ -171,13 +178,26 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                               child: CustomTextFormField(
                                 isObscure: false,
                                 hintText: "LİSANS DERECESİ",
+                                formcontroller:
+                                    formcont.settingsLicenseController,
                               ),
                             ),
                             SizedBox(
                               width: 20,
                             ),
                             ElevatedButton(
-                                onPressed: () {}, child: Text("Güncelle"))
+                                onPressed: () {
+                                  try {
+                                    Get.put(ProfileSettingsController())
+                                        .changeSingleField(
+                                            box.read("userUID"),
+                                            "licensedegree",
+                                            formcont.settingsLicenseController
+                                                .text);
+                                    formcont.settingsLicenseController.clear();
+                                  } catch (e) {}
+                                },
+                                child: Text("Güncelle"))
                           ],
                         ),
                         SizedBox(
@@ -201,16 +221,14 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                                   Get.put(ProfileSettingsController())
                                       .changeSingleField(
                                           box.read("userUID"),
-                                          "phone",
+                                          "phoneNum",
                                           formcont
                                               .settingsPhoneController.text);
+                                  formcont.settingsPhoneController.clear();
                                 },
                                 child: Text("Güncelle"))
                           ],
                         ),
-                        RegisterCustomButton(
-                          buttonText: "DEĞİŞTİR",
-                        )
                       ],
                     ),
                   ),
@@ -225,6 +243,7 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                         children: [
                           Expanded(
                             child: CustomTextFormField(
+                              formcontroller: formcont.settingsEmailController,
                               isObscure: false,
                               hintText: "EMAIL",
                             ),
@@ -235,11 +254,8 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                           ElevatedButton(
                               onPressed: () {
                                 Get.put(ProfileSettingsController())
-                                    .changeSingleField(
-                                        box.read("userUID"),
-                                        "description",
-                                        formcont.settingsDescriptionController
-                                            .text);
+                                    .changeEmail(
+                                        formcont.settingsEmailController.text);
                               },
                               child: Text("Güncelle"))
                         ],

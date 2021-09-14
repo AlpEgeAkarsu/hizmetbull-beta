@@ -62,6 +62,7 @@ class ProfileSettingsView extends GetWidget<FirebaseAuthController> {
                                     Get.put(ProfileSettingsController())
                                         .changePassword(formcont
                                             .settingsPasswordController.text);
+                                    formcont.settingsPasswordController.clear();
                                   },
                                   child: Text("DEĞİŞTİR"))
                             ],
@@ -74,10 +75,7 @@ class ProfileSettingsView extends GetWidget<FirebaseAuthController> {
                     "Şifre Değiştirme",
                   ),
                   trailing: IconButton(
-                    onPressed: () {
-                      Get.put(MapController())
-                          .userLocation(box.read("userUID"));
-                    },
+                    onPressed: () {},
                     icon: Icon(Icons.arrow_right),
                   ),
                 ),

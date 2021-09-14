@@ -15,6 +15,7 @@ class FormController extends GetxController {
   TextEditingController settingsPasswordController =
       new TextEditingController();
   TextEditingController settingsNameController = new TextEditingController();
+  TextEditingController settingsEmailController = new TextEditingController();
   TextEditingController settingsSurnameController = new TextEditingController();
   TextEditingController settingsPhoneController = new TextEditingController();
   TextEditingController settingsDescriptionController =

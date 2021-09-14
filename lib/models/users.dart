@@ -19,6 +19,7 @@ class AppUser {
       this.licensedegree,
       this.location,
       this.name,
+      this.university,
       this.phoneNum,
       this.surname,
       this.jobcity,
@@ -32,6 +33,7 @@ class AppUser {
   String email;
   String job;
   String licensedegree;
+  String university;
   Location location;
   String name;
   String phoneNum;
@@ -58,6 +60,7 @@ class AppUser {
       uid: json["uid"] == null ? null : json["uid"],
       userType: json["userType"] == null ? null : json["userType"],
       userPoint: json["userPoint"] == null ? null : json["userPoint"],
+      university: json["university"] == null ? null : json["university"],
       profilePhotoPath:
           json["profilePhotoPath"] == null ? null : json["profilePhotoPath"],
       jobcity: json["jobcity"] == null ? null : json["jobcity"]);
@@ -77,6 +80,7 @@ class AppUser {
         "uid": uid == null ? null : uid,
         "userType": userType == null ? null : userType,
         "userPoint": userPoint == null ? null : userPoint,
+        "university": university == null ? null : university,
         "jobcity": jobcity == null ? null : jobcity,
         "profilePhotoPath": profilePhotoPath == null ? null : profilePhotoPath
       };

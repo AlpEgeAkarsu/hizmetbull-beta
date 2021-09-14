@@ -49,7 +49,7 @@ class HomeView extends GetWidget<FirebaseAuthController> {
               children: [
                 IconButton(
                   icon: Icon(Icons.person),
-                  onPressed: () {
+                  onPressed: () async {
                     try {
                       // if user is logged and name and surname is not null
                       if (box.read('isLoggedIn') != null &&
@@ -57,32 +57,36 @@ class HomeView extends GetWidget<FirebaseAuthController> {
                           box.read('surname') != null) {
                         // if usertype is hizmetveren
                         if (box.read("userType") == 2) {
+                          await Get.put(ImageController())
+                              .getUserProfilePhotoURL(box.read("userUID"));
+                          Get.put(ImageController()).photoURLS.clear();
+                          await Get.put(ImageController())
+                              .getImageList(userUID: box.read("userUID"));
                           Get.put(CommentController()).comments.clear();
                           Get.put(CommentController()).currentPageUID.value =
                               box.read("userUID");
                           Get.put(CommentController()).getUserComments();
-                          Get.put(CommentController())
+                          await Get.put(CommentController())
                               .calculateUserPoint(box.read("userUID"));
-                          Get.put(ImageController())
-                              .getUserProfilePhotoURL(box.read("userUID"));
+
                           Get.put(CommonDatabaseController())
                               .getCurrentUserDescription(box.read("userUID"));
-                          Get.put(ImageController()).photoURLS.clear();
-                          Get.put(ImageController()).getImageList();
 
                           Get.toNamed("/profileView");
                         }
                         // if user is logged and usertype is hizmetalan
-                        Get.put(ImageController())
-                            .getUserProfilePhotoURL(box.read("userUID"));
-                        Get.put(ImageController()).photoURLS.clear();
-                        Get.put(ImageController()).getImageList();
-                        Get.put(MapController())
-                            .getUserCurrentAdressFromDb(box.read("userUID"));
-                        // Get.put(MapController())
-                        //     .userLocation(box.read("userUID"));
+                        else {
+                          Get.put(ImageController())
+                              .getUserProfilePhotoURL(box.read("userUID"));
+                          Get.put(ImageController()).photoURLS.clear();
+                          Get.put(ImageController()).getImageList();
+                          Get.put(MapController())
+                              .getUserCurrentAdressFromDb(box.read("userUID"));
+                          // Get.put(MapController())
+                          //     .userLocation(box.read("userUID"));
 
-                        Get.toNamed("/profileView");
+                          Get.toNamed("/profileView");
+                        }
                       } else
                         Get.toNamed("/loginView");
                     } catch (e) {

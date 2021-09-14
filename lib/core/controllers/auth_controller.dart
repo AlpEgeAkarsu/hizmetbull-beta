@@ -132,6 +132,9 @@ class FirebaseAuthController extends GetxController {
         currentUserData.write('name', appuser?.name);
         currentUserData.write('surname', appuser?.surname);
         currentUserData.write('email', appuser?.email);
+        currentUserData.write('phone', appuser?.phoneNum);
+        currentUserData.write('licensedegree', appuser?.licensedegree);
+        currentUserData.write('university', appuser?.university);
         currentUserData.write('isLoggedIn', true);
         currentUserData.write('profilePhotoPath', appuser?.profilePhotoPath);
         currentUserData.write('job', appuser?.job);

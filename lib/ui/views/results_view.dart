@@ -137,7 +137,9 @@ class ResultsView extends GetWidget<FirebaseAuthController> {
                                               size: 15,
                                             ),
                                             Text(
-                                              "05322230525",
+                                              controller.userlistoo[index]
+                                                      .phoneNum ??
+                                                  "-",
                                               style: cardTextStyle(),
                                             ),
                                           ],

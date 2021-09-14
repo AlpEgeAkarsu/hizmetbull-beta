@@ -66,16 +66,16 @@ class CommentController extends GetxController {
               tempCommentList.add(userComment);
               totalPoints = totalPoints + userComment.commentPoint;
               i++;
-              print(userComment.commentPoint.toString());
-              print("Total Points = $totalPoints");
-              print("i = $i");
+              // print(userComment.commentPoint.toString());
+              // print("Total Points = $totalPoints");
+              // print("i = $i");
             },
           );
           averagePoint = totalPoints / i;
           userTotalPoint.value = averagePoint;
           updateUserPoint(userid, averagePoint);
-          print("usertotalpoint = $userTotalPoint");
-          print("Average Point" + averagePoint.toString());
+          // print("usertotalpoint = $userTotalPoint");
+          // print("Average Point" + averagePoint.toString());
         }
       });
     } catch (e) {}

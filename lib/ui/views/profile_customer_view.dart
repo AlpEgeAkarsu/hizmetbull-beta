@@ -87,9 +87,6 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                 SizedBox(
                   height: 30,
                 ),
-                // profileInformationLabels(
-                //     firstLabel: "Doğum Tarihi", secondLabel: "-"),
-                // basicSpacer(),
                 profileInformationLabels(
                     secondLabel: controller.userlistoo[arg].city),
                 basicSpacer(),
@@ -103,11 +100,22 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                 basicSpacer(),
                 profileInformationLabels(
                     firstLabel: "Telefon Numarası:",
-                    secondLabel: "05333536362"),
+                    secondLabel: controller.userlistoo[arg]?.phoneNum != null
+                        ? controller.userlistoo[arg]?.phoneNum
+                        : "-"),
                 basicSpacer(),
                 profileInformationLabels(
                     firstLabel: "Lisans Derecesi:",
-                    secondLabel: "Yüksek Lisans"),
+                    secondLabel:
+                        controller.userlistoo[arg]?.licensedegree != null
+                            ? controller.userlistoo[arg]?.licensedegree
+                            : "-"),
+                basicSpacer(),
+                profileInformationLabels(
+                    firstLabel: "Üniversite:",
+                    secondLabel: controller.userlistoo[arg]?.university != null
+                        ? controller.userlistoo[arg]?.university
+                        : "-"),
                 basicSpacer(),
                 SizedBox(
                   height: 10,
@@ -143,7 +151,7 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                         mainAxisSpacing: 5.0,
                       ),
                       itemCount: imageController.photoURLS.length == 0
-                          ? 1
+                          ? 0
                           : imageController.photoURLS.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
@@ -189,7 +197,10 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                CircleAvatar(),
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      "https://www.nicepng.com/png/detail/136-1366211_group-of-10-guys-login-user-icon-png.png"),
+                                ),
                                 Text(
                                   commentController.comments[index].commentator,
                                   style: TextStyle(
@@ -204,7 +215,7 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                                                 .comments.isNotEmpty
                                             ? commentController
                                                 .comments[index].commentContent
-                                            : "asd"),
+                                            : "Boş Yorum"),
                                       )
                                     ],
                                   ),
@@ -213,8 +224,9 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                                   initialRating:
                                       commentController.userTotalPoint !=
                                               0.0.obs
-                                          ? commentController.userTotalPoint /
-                                              commentController.comments.length
+                                          ? commentController
+                                              .comments[index].commentPoint
+                                              .toDouble()
                                           : 2,
                                   ignoreGestures: true,
                                   direction: Axis.horizontal,

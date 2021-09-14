@@ -1,8 +1,10 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_storage/get_storage.dart';
 
 class ChatRoomStoreController extends GetxController {
+  final box = GetStorage();
   Future<bool> addChatRoom(chatRoom, chatRoomId) {
     FirebaseFirestore.instance
         .collection("chatRoom")
