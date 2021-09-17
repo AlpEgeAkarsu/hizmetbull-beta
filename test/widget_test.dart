@@ -10,7 +10,6 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:hizmet_bull_beta/core/controllers/chatroomstore_controller.dart';
-import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
 
 void main() {
   test("Read File", () {

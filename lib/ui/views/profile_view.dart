@@ -2,21 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/common_database_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/map_controller.dart';
 import 'package:hizmet_bull_beta/ui/widgets/profile_widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileView extends GetWidget<FirebaseAuthController> {
   final box = GetStorage();
   CommentController commentController = Get.put(CommentController());
   ImageController imageController = Get.put(ImageController());
+
+  List<Marker> _marker = [
+    new Marker(
+        markerId: MarkerId('KullanıcıLokasyonu'),
+        position: LatLng(Get.put(MapController()).latitude.value,
+            Get.put(MapController()).longitude.value),
+        infoWindow: InfoWindow(title: "Kullanıcı Adresi")),
+  ];
   @override
   Widget build(BuildContext context) {
     // commentController.currentPageUID.value = box.read("userUID");
-
+    var latitude = Get.put(MapController()).latitude.value;
+    var longitude = Get.put(MapController()).longitude.value;
     // commentController.getUserComments();
     return Scaffold(
       appBar: AppBar(
@@ -65,9 +76,31 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                     basicSpacer(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: profileInformationLabels(
-                          firstLabel: "Telefon Numarası:",
-                          secondLabel: box.read("phone") ?? "-"),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Text(
+                              "Telefon Numarası:",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                              onTap: () async {
+                                if (box.read("phone") != null)
+                                  launch("tel:" + box.read("phone"));
+                              },
+                              child: Text(box.read("phone") ?? "-",
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                     basicSpacer(),
                     Padding(
@@ -278,11 +311,23 @@ class ProfileView extends GetWidget<FirebaseAuthController> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        "Konuma Git",
+                        "Konum",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
+                    latitude != null && longitude != null
+                        ? Container(
+                            width: 350,
+                            height: 300,
+                            child: GoogleMap(
+                              initialCameraPosition: CameraPosition(
+                                  target: LatLng(latitude, longitude),
+                                  zoom: 11),
+                              markers: Set<Marker>.of(_marker),
+                            ),
+                          )
+                        : Container()
                   ],
                 ),
               ),

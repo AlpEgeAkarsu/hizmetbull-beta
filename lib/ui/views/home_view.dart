@@ -5,9 +5,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
-import 'package:hizmet_bull_beta/core/controllers/chat_controller.dart';
-import 'package:hizmet_bull_beta/core/controllers/chatroom_controller.dart';
-import 'package:hizmet_bull_beta/core/controllers/chatroomstore_controller.dart';
+
 import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/common_database_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
@@ -37,7 +35,8 @@ class HomeView extends GetWidget<FirebaseAuthController> {
               print(box?.read('name'));
               print(box?.read('isLoggedIn'));
               print(box?.read('userType').toString());
-
+              Get.put(MapController())
+                  .getUserCurrentLocation(box.read("userUID"));
               Get.snackbar("Ekran Yenilendi",
                   "Kullanıcı Adı: " + box.read('name').toString());
             },
@@ -71,7 +70,10 @@ class HomeView extends GetWidget<FirebaseAuthController> {
 
                           Get.put(CommonDatabaseController())
                               .getCurrentUserDescription(box.read("userUID"));
-
+                          Get.put(CommonDatabaseController())
+                              .getCurrentUserAddress(box.read("userUID"));
+                          await Get.put(MapController())
+                              .getUserCurrentLocation(box.read("userUID"));
                           Get.toNamed("/profileView");
                         }
                         // if user is logged and usertype is hizmetalan

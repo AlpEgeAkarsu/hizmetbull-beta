@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/form_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/map_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/profile_settings_controller.dart';
-import 'package:hizmet_bull_beta/models/suggestion.dart';
-import 'package:hizmet_bull_beta/ui/widgets/register_custom_button.dart';
+
 import 'package:hizmet_bull_beta/ui/widgets/register_custom_formfield.dart';
 
 class ProfileSettingsView extends GetWidget<FirebaseAuthController> {
@@ -119,6 +117,33 @@ class ProfileSettingsView extends GetWidget<FirebaseAuthController> {
                     icon: Icon(Icons.arrow_right),
                   ),
                 ),
+                ListTile(
+                  tileColor: Colors.white,
+                  onTap: () {
+                    Get.toNamed("/profileAddressSettings");
+                  },
+                  title: Text(
+                    "Adres Bilgilerini Manuel Olarak Girme",
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_right),
+                  ),
+                ),
+                ListTile(
+                  tileColor: Colors.red,
+                  onTap: () {
+                    Get.put(ProfileSettingsController()).deleteAccount();
+                  },
+                  title: Text(
+                    "Hesabı Silme",
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.arrow_right),
+                  ),
+                ),
+
                 SizedBox(
                   height: 20,
                 ),

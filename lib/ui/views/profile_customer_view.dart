@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hizmet_bull_beta/core/controllers/auth_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/chat_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/chatroomstore_controller.dart';
@@ -9,7 +10,7 @@ import 'package:hizmet_bull_beta/core/controllers/comment_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/image_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/map_controller.dart';
 import 'package:hizmet_bull_beta/models/evaluation.dart';
-import 'package:hizmet_bull_beta/ui/views/chatstore_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 getChatRoomId(String a, String b) {
   if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
@@ -41,8 +42,16 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
   CommentController commentController = Get.put(CommentController());
   ChatController chatController = Get.put(ChatController());
   ImageController imageController = Get.put(ImageController());
+  MapController mapController = Get.put(MapController());
   int arg = Get.arguments;
 
+  List<Marker> _marker = [
+    new Marker(
+        markerId: MarkerId('KullanıcıLokasyonu'),
+        position: LatLng(Get.put(MapController()).latitude.value,
+            Get.put(MapController()).longitude.value),
+        infoWindow: InfoWindow(title: "Kullanıcı Adresi")),
+  ];
   @override
   Widget build(BuildContext context) {
     final box = GetStorage();
@@ -98,11 +107,29 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                     firstLabel: "Mail Adres:",
                     secondLabel: controller.userlistoo[arg]?.email),
                 basicSpacer(),
-                profileInformationLabels(
-                    firstLabel: "Telefon Numarası:",
-                    secondLabel: controller.userlistoo[arg]?.phoneNum != null
-                        ? controller.userlistoo[arg]?.phoneNum
-                        : "-"),
+                Row(children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "Telefon Numarası:",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (controller.userlistoo[arg]?.phoneNum != null)
+                          launch("tel:" + controller.userlistoo[arg]?.phoneNum);
+                      },
+                      child: Text(controller.userlistoo[arg]?.phoneNum ?? "-",
+                          style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  )
+                ]),
                 basicSpacer(),
                 profileInformationLabels(
                     firstLabel: "Lisans Derecesi:",
@@ -119,6 +146,13 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                 basicSpacer(),
                 SizedBox(
                   height: 10,
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Açıklamalar",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
                 ),
                 Container(
                   width: Get.width * 0.8,
@@ -179,6 +213,9 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                         );
                       },
                     )),
+                SizedBox(
+                  height: 20,
+                ),
                 Align(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -249,6 +286,19 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                         );
                       },
                     )),
+                SizedBox(
+                  height: 20,
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Adres",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Container(
                   width: Get.width * 0.8,
                   height: 150,
@@ -264,6 +314,27 @@ class ProfileCustomerView extends GetWidget<FirebaseAuthController> {
                     ],
                   ),
                 ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Konum",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                mapController.latitude.value != null &&
+                        mapController.longitude.value != null
+                    ? Container(
+                        width: 350,
+                        height: 300,
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                              target: LatLng(mapController.latitude.value,
+                                  mapController.longitude.value),
+                              zoom: 11),
+                          markers: Set<Marker>.of(_marker),
+                        ),
+                      )
+                    : Container()
               ],
             ),
           ),

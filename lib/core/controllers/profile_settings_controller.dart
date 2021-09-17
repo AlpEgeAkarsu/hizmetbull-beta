@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/state_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hizmet_bull_beta/models/users.dart';
 
 class ProfileSettingsController extends GetxController {
   var firebaseDbRef = FirebaseDatabase.instance.reference();
@@ -113,5 +114,19 @@ class ProfileSettingsController extends GetxController {
       Get.defaultDialog(
           title: "Başarısız", middleText: "Şifre Değiştirilemedi");
     }
+  }
+
+  deleteAccount() async {
+    var tempUser = _auth.currentUser;
+    try {
+      Get.defaultDialog(
+        title: "Emin Misiniz ?",
+        middleText: "Hesabınız ve bütün veriler kalıcı olarak silinecektir.",
+        middleTextStyle:
+            TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+        textConfirm: "Sil",
+        textCancel: "İptal",
+      );
+    } catch (e) {}
   }
 }

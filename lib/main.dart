@@ -16,7 +16,7 @@ import 'package:hizmet_bull_beta/ui/views/profile_settings_view.dart';
 import 'package:hizmet_bull_beta/ui/views/profile_view.dart';
 import 'package:hizmet_bull_beta/ui/views/register_view.dart';
 import 'package:hizmet_bull_beta/ui/views/results_view.dart';
-import 'package:hizmet_bull_beta/ui/views/tempmap_view.dart';
+import 'package:hizmet_bull_beta/ui/views/profile_address_settings_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,6 +38,9 @@ void main() async {
       GetPage(name: "/resultsView", page: () => ResultsView()),
       GetPage(name: "/profileSettingsView", page: () => ProfileSettingsView()),
       GetPage(name: "/profileCustomerView", page: () => ProfileCustomerView()),
+      GetPage(
+          name: "/profileAddressSettings",
+          page: () => ProfileAddressSettingsView()),
       GetPage(name: "/chatStoreView", page: () => ChatStoreView()),
       GetPage(name: "/chatStoreUserView", page: () => ChatStoreUserView()),
       GetPage(name: "/chatRoomStoreView", page: () => ChatRoomStoreView()),

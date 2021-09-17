@@ -8,6 +8,7 @@ class MapController extends GetxController {
   var longitude = 0.0.obs;
   var currentUserAddress = "".obs;
   final firebaseDbRef = FirebaseDatabase.instance.reference();
+  final key = 'YOUR_KEY';
 
   userLocation(String userid) async {
     // get current position (lat/lng) of user
@@ -40,6 +41,8 @@ class MapController extends GetxController {
       "latitude": position.latitude,
       "longitude": position.longitude
     };
+    this.latitude.value = position.latitude;
+    this.longitude.value = position.longitude;
     try {
       await firebaseDbRef
           .child("users")
@@ -51,6 +54,22 @@ class MapController extends GetxController {
     }
   }
 
+  getUserCurrentLocation(String uid) async {
+    try {
+      await firebaseDbRef
+          .child("users")
+          .child(uid)
+          .child("location")
+          .once()
+          .then((value) {
+        print(value.value["latitude"]);
+        print(value.value["longitude"]);
+        latitude.value = value.value["latitude"];
+        longitude.value = value.value["longitude"];
+      });
+    } catch (e) {}
+  }
+
   // get user address from realtime db
   Future<void> getUserCurrentAdressFromDb(String uid) async {
     await firebaseDbRef
@@ -59,7 +78,6 @@ class MapController extends GetxController {
         .child("address")
         .once()
         .then((value) {
-      print(value.value);
       currentUserAddress.value = value.value;
     });
   }

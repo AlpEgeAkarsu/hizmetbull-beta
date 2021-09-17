@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:hizmet_bull_beta/models/evaluation.dart';
-
 AppUser userFromJson(String str) => AppUser.fromJson(json.decode(str));
 
 String userToJson(AppUser data) => json.encode(data.toJson());

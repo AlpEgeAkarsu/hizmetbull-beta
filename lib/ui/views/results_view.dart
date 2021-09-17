@@ -42,10 +42,13 @@ class ResultsView extends GetWidget<FirebaseAuthController> {
                 commentController.comments.clear();
                 commentController.userTotalPoint.value = 0.0;
                 commentController.getUserComments();
+
                 await commentController
                     .calculateUserPoint(controller.userlistoo[index].uid);
                 Get.put(MapController()).getUserCurrentAdressFromDb(
                     controller.userlistoo[index].uid);
+                await Get.put(MapController())
+                    .getUserCurrentLocation(controller.userlistoo[index].uid);
                 Get.toNamed("/profileCustomerView", arguments: index);
               },
               child: Card(

@@ -5,7 +5,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hizmet_bull_beta/core/controllers/form_controller.dart';
 import 'package:hizmet_bull_beta/core/controllers/profile_settings_controller.dart';
 import 'package:hizmet_bull_beta/models/suggestion.dart';
-import 'package:hizmet_bull_beta/ui/widgets/register_custom_button.dart';
 import 'package:hizmet_bull_beta/ui/widgets/register_custom_formfield.dart';
 
 class ProfileInformationsSettingsView extends StatelessWidget {
@@ -206,13 +205,18 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                         Row(
                           children: [
                             Expanded(
-                              child: CustomTextFormField(
-                                isObscure: false,
+                                child: TextFormField(
+                              controller: formcont.settingsPhoneController,
+                              keyboardType: TextInputType.phone,
+                              maxLength: 11,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(),
                                 hintText: "TELEFON NUMARASI",
-                                formcontroller:
-                                    formcont.settingsPhoneController,
+                                hintStyle: TextStyle(color: Colors.black),
+                                focusColor: Colors.black,
                               ),
-                            ),
+                            )),
                             SizedBox(
                               width: 20,
                             ),
@@ -266,12 +270,16 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: CustomTextFormField(
-                              isObscure: false,
+                              child: TextFormField(
+                            controller: formcont.settingsPhoneController,
+                            keyboardType: TextInputType.phone,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              enabledBorder: OutlineInputBorder(),
                               hintText: "TELEFON NUMARASI",
-                              formcontroller: formcont.settingsPhoneController,
+                              focusColor: Colors.black,
                             ),
-                          ),
+                          )),
                           SizedBox(
                             width: 20,
                           ),
