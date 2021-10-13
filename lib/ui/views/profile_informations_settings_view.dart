@@ -10,6 +10,7 @@ import 'package:hizmet_bull_beta/ui/widgets/register_custom_formfield.dart';
 class ProfileInformationsSettingsView extends StatelessWidget {
   var formcont = Get.put(FormController());
   final box = GetStorage();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,38 +111,46 @@ class ProfileInformationsSettingsView extends StatelessWidget {
                         SizedBox(
                           height: 10,
                         ),
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: searchTextField(formcont, "HİZMET SEÇ"),
-                        //     ),
-                        //     SizedBox(
-                        //       width: 20,
-                        //     ),
-                        //     ElevatedButton(
-                        //         onPressed: () {
-
-                        //         }, child: Text("Güncelle"))
-                        //   ],
-                        // ),
-                        // SizedBox(
-                        //   height: 10,
-                        // ),
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: searchTextField(formcont, "ŞEHİR SEÇ"),
-                        //     ),
-                        //     SizedBox(
-                        //       width: 20,
-                        //     ),
-                        //     ElevatedButton(
-                        //         onPressed: () {}, child: Text("Güncelle"))
-                        //   ],
-                        // ),
-                        // SizedBox(
-                        //   height: 10,
-                        // ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: searchTextField(formcont, "HİZMET"),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  await Get.put(ProfileSettingsController())
+                                      .changeJob(box.read("userUID"),
+                                          formcont.settingsJobController.text);
+                                },
+                                child: Text("Güncelle"))
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: searchTextField(formcont, "ŞEHİR"),
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            ElevatedButton(
+                                onPressed: () async {
+                                  await Get.put(ProfileSettingsController())
+                                      .changeCity(box.read("userUID"),
+                                          formcont.settingsCityController.text);
+                                },
+                                child: Text("Güncelle"))
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: [
                             Expanded(
@@ -311,13 +320,13 @@ class ProfileInformationsSettingsView extends StatelessWidget {
         color: Colors.white,
       ),
       textFieldConfiguration: TextFieldConfiguration(
-          controller: hintTxt == "HİZMET SEÇ"
-              ? formController.jobController
-              : formController.cityController,
+          controller: hintTxt == "HİZMET"
+              ? formController.settingsJobController
+              : formController.settingsCityController,
           decoration:
               InputDecoration(border: OutlineInputBorder(), hintText: hintTxt)),
       suggestionsCallback: (pattern) {
-        return hintTxt == "HİZMET SEÇ"
+        return hintTxt == "HİZMET"
             ? SuggestionData.getSuggestions(pattern)
             : SuggestionData.getCitySuggestions(pattern);
       },
@@ -327,7 +336,7 @@ class ProfileInformationsSettingsView extends StatelessWidget {
         );
       },
       onSuggestionSelected: (suggestion) {
-        hintTxt == "HİZMET SEÇ"
+        hintTxt == "HİZMET"
             ? formController.settingsJobController.text = suggestion
             : formController.settingsCityController.text = suggestion;
       },

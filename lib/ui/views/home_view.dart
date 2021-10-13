@@ -209,7 +209,7 @@ Widget searchButton(TextEditingController controller,
         if (authController.userlistoo.isNotEmpty) {
           Get.toNamed("/resultsView");
         } else if (authController.isJobSelected.value && city != "") {
-          Get.snackbar("Deneme", "Hizmet Bulunamadı");
+          Get.snackbar("Hata", "Hizmet Bulunamadı");
         } else
           print("");
       }

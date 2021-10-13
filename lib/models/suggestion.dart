@@ -399,6 +399,7 @@ class SuggestionData {
     "Yayıncı",
     "Yazar",
     "Yazılım mühendisi",
+    "Yazılım geliştiricisi",
     "Yelkenci",
     "Yüzücü",
     "Yönetmen",

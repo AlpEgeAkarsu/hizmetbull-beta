@@ -46,10 +46,17 @@ class ProfileSettingsController extends GetxController {
           .set(content)
           .then((value) {
         firebaseDbRef
+            .child("users")
             .child(uid)
-            .child("jobCity")
+            .child("jobcity")
             .set(content + "_" + tempCity)
-            .onError((error, stackTrace) => print(error));
+            .onError((error, stackTrace) => print(error))
+            .then((value) {
+          Get.defaultDialog(
+              title: "Güncelleme Başarılı",
+              middleText:
+                  "Yenilenmiş Ayarlarınızı Görebilmek İçin Lütfen Yeniden Giriş Yapınız");
+        });
       });
     } catch (e) {
       print(e);
@@ -71,10 +78,17 @@ class ProfileSettingsController extends GetxController {
           .set(content)
           .then((value) {
         firebaseDbRef
+            .child("users")
             .child(uid)
-            .child("jobCity")
+            .child("jobcity")
             .set(content + "_" + tempJob)
-            .onError((error, stackTrace) => print(error));
+            .onError((error, stackTrace) => print(error))
+            .then((value) {
+          Get.defaultDialog(
+              title: "Güncelleme Başarılı",
+              middleText:
+                  "Yenilenmiş Ayarlarınızı Görebilmek İçin Lütfen Yeniden Giriş Yapınız");
+        });
       });
     } catch (e) {
       print(e);
